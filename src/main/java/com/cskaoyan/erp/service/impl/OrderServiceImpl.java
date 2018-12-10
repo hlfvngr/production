@@ -64,7 +64,7 @@ public class OrderServiceImpl implements OrderService {
         return true;
     }
 
-    public Order finOrderById(String orderId) {
+    public Order findOrderById(String orderId) {
         return orderMapper.selectByPrimaryKey(orderId);
     }
 

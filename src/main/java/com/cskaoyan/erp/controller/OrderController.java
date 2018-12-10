@@ -3,16 +3,14 @@ package com.cskaoyan.erp.controller;
 import com.cskaoyan.erp.bean.Customer;
 import com.cskaoyan.erp.bean.Order;
 import com.cskaoyan.erp.bean.Product;
+import com.cskaoyan.erp.service.CustomService;
 import com.cskaoyan.erp.service.OrderService;
 import com.cskaoyan.erp.service.ProductService;
 import com.cskaoyan.erp.utils.PageModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
@@ -26,8 +24,8 @@ public class OrderController {
 
     @Autowired
     OrderService orderService;
-   /* @Autowired
-    CustomerService customerService;*/
+    @Autowired
+    CustomService customService;
     @Autowired
     ProductService productService;
 
@@ -65,6 +63,18 @@ public class OrderController {
 
 
     //查找订单
+    @RequestMapping("/get/${orderId}")
+    @ResponseBody
+    public Order get(@PathVariable String orderId){
+        return orderService.findOrderById(orderId);
+    }
+
+    @RequestMapping("/get_data")
+    @ResponseBody
+    public List<Order> get_data(){
+        return orderService.findAllOrder();
+    }
+
     @RequestMapping("/find")
     public String find(){
         return "order_list";
@@ -102,7 +112,7 @@ public class OrderController {
     public   Map<String,Object> search_product_by_orderCustom(String searchValue, PageModel pageModel) {
         Map<String, Object> result = new HashMap<String, Object>();
 
-        Customer customer = customerService.findCustomByName(searchValue);
+        Customer customer = customService.findCustomByName(searchValue);
         Order order = new Order();
         order.setOrderCustom(customer);
         List<Order> orders = orderService.findAllOrder(order, pageModel);
@@ -114,7 +124,7 @@ public class OrderController {
 
     @RequestMapping("/search_product_by_orderProduct")
     @ResponseBody
-    public  Map<String,Object> search_product_by_productType(String searchValue, PageModel pageModel){
+    public  Map<String,Object> search_product_by_orderProduct(String searchValue, PageModel pageModel){
         Map<String,Object> result = new HashMap<String, Object>();
 
         Product product = productService.findProductByName(searchValue);
