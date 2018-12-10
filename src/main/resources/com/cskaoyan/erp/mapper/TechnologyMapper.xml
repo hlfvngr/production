@@ -12,99 +12,101 @@
     <result column="double_capacity" jdbcType="INTEGER" property="doubleCapacity" />
     <result column="overfulfil_capacity" jdbcType="INTEGER" property="overfulfilCapacity" />
   </resultMap>
-  <sql id="Base_Column_List">
-    technology_id, technology_name, price, vital_process_period, standard_capacity, overtime_standard_capacity, 
-    overtime_overfulfil_capacity, double_capacity, overfulfil_capacity
-  </sql>
-  <insert id="insertSelective" parameterType="com.cskaoyan.erp.bean.Technology">
-    insert into technology
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="technologyId != null">
-        technology_id,
-      </if>
-      <if test="technologyName != null">
-        technology_name,
-      </if>
-      <if test="price != null">
-        price,
-      </if>
-      <if test="vitalProcessPeriod != null">
-        vital_process_period,
-      </if>
-      <if test="standardCapacity != null">
-        standard_capacity,
-      </if>
-      <if test="overtimeStandardCapacity != null">
-        overtime_standard_capacity,
-      </if>
-      <if test="overtimeOverfulfilCapacity != null">
-        overtime_overfulfil_capacity,
-      </if>
-      <if test="doubleCapacity != null">
-        double_capacity,
-      </if>
-      <if test="overfulfilCapacity != null">
-        overfulfil_capacity,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="technologyId != null">
-        #{technologyId,jdbcType=VARCHAR},
-      </if>
-      <if test="technologyName != null">
-        #{technologyName,jdbcType=VARCHAR},
-      </if>
-      <if test="price != null">
-        #{price,jdbcType=DECIMAL},
-      </if>
-      <if test="vitalProcessPeriod != null">
-        #{vitalProcessPeriod,jdbcType=VARCHAR},
-      </if>
-      <if test="standardCapacity != null">
-        #{standardCapacity,jdbcType=INTEGER},
-      </if>
-      <if test="overtimeStandardCapacity != null">
-        #{overtimeStandardCapacity,jdbcType=INTEGER},
-      </if>
-      <if test="overtimeOverfulfilCapacity != null">
-        #{overtimeOverfulfilCapacity,jdbcType=INTEGER},
-      </if>
-      <if test="doubleCapacity != null">
-        #{doubleCapacity,jdbcType=INTEGER},
-      </if>
-      <if test="overfulfilCapacity != null">
-        #{overfulfilCapacity,jdbcType=INTEGER},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cskaoyan.erp.bean.Technology">
-    update technology
-    <set>
-      <if test="technologyName != null">
-        technology_name = #{technologyName,jdbcType=VARCHAR},
-      </if>
-      <if test="price != null">
-        price = #{price,jdbcType=DECIMAL},
-      </if>
-      <if test="vitalProcessPeriod != null">
-        vital_process_period = #{vitalProcessPeriod,jdbcType=VARCHAR},
-      </if>
-      <if test="standardCapacity != null">
-        standard_capacity = #{standardCapacity,jdbcType=INTEGER},
-      </if>
-      <if test="overtimeStandardCapacity != null">
-        overtime_standard_capacity = #{overtimeStandardCapacity,jdbcType=INTEGER},
-      </if>
-      <if test="overtimeOverfulfilCapacity != null">
-        overtime_overfulfil_capacity = #{overtimeOverfulfilCapacity,jdbcType=INTEGER},
-      </if>
-      <if test="doubleCapacity != null">
-        double_capacity = #{doubleCapacity,jdbcType=INTEGER},
-      </if>
-      <if test="overfulfilCapacity != null">
-        overfulfil_capacity = #{overfulfilCapacity,jdbcType=INTEGER},
-      </if>
-    </set>
-    where technology_id = #{technologyId,jdbcType=VARCHAR}
-  </update>
+
+
+  <!--<sql id="Base_Column_List">-->
+    <!--technology_id, technology_name, price, vital_process_period, standard_capacity, overtime_standard_capacity, -->
+    <!--overtime_overfulfil_capacity, double_capacity, overfulfil_capacity-->
+  <!--</sql>-->
+  <!--<insert id="insertSelective" parameterType="com.cskaoyan.erp.bean.Technology">-->
+    <!--insert into technology-->
+    <!--<trim prefix="(" suffix=")" suffixOverrides=",">-->
+      <!--<if test="technologyId != null">-->
+        <!--technology_id,-->
+      <!--</if>-->
+      <!--<if test="technologyName != null">-->
+        <!--technology_name,-->
+      <!--</if>-->
+      <!--<if test="price != null">-->
+        <!--price,-->
+      <!--</if>-->
+      <!--<if test="vitalProcessPeriod != null">-->
+        <!--vital_process_period,-->
+      <!--</if>-->
+      <!--<if test="standardCapacity != null">-->
+        <!--standard_capacity,-->
+      <!--</if>-->
+      <!--<if test="overtimeStandardCapacity != null">-->
+        <!--overtime_standard_capacity,-->
+      <!--</if>-->
+      <!--<if test="overtimeOverfulfilCapacity != null">-->
+        <!--overtime_overfulfil_capacity,-->
+      <!--</if>-->
+      <!--<if test="doubleCapacity != null">-->
+        <!--double_capacity,-->
+      <!--</if>-->
+      <!--<if test="overfulfilCapacity != null">-->
+        <!--overfulfil_capacity,-->
+      <!--</if>-->
+    <!--</trim>-->
+    <!--<trim prefix="values (" suffix=")" suffixOverrides=",">-->
+      <!--<if test="technologyId != null">-->
+        <!--#{technologyId,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="technologyName != null">-->
+        <!--#{technologyName,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="price != null">-->
+        <!--#{price,jdbcType=DECIMAL},-->
+      <!--</if>-->
+      <!--<if test="vitalProcessPeriod != null">-->
+        <!--#{vitalProcessPeriod,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="standardCapacity != null">-->
+        <!--#{standardCapacity,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="overtimeStandardCapacity != null">-->
+        <!--#{overtimeStandardCapacity,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="overtimeOverfulfilCapacity != null">-->
+        <!--#{overtimeOverfulfilCapacity,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="doubleCapacity != null">-->
+        <!--#{doubleCapacity,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="overfulfilCapacity != null">-->
+        <!--#{overfulfilCapacity,jdbcType=INTEGER},-->
+      <!--</if>-->
+    <!--</trim>-->
+  <!--</insert>-->
+  <!--<update id="updateByPrimaryKeySelective" parameterType="com.cskaoyan.erp.bean.Technology">-->
+    <!--update technology-->
+    <!--<set>-->
+      <!--<if test="technologyName != null">-->
+        <!--technology_name = #{technologyName,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="price != null">-->
+        <!--price = #{price,jdbcType=DECIMAL},-->
+      <!--</if>-->
+      <!--<if test="vitalProcessPeriod != null">-->
+        <!--vital_process_period = #{vitalProcessPeriod,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="standardCapacity != null">-->
+        <!--standard_capacity = #{standardCapacity,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="overtimeStandardCapacity != null">-->
+        <!--overtime_standard_capacity = #{overtimeStandardCapacity,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="overtimeOverfulfilCapacity != null">-->
+        <!--overtime_overfulfil_capacity = #{overtimeOverfulfilCapacity,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="doubleCapacity != null">-->
+        <!--double_capacity = #{doubleCapacity,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="overfulfilCapacity != null">-->
+        <!--overfulfil_capacity = #{overfulfilCapacity,jdbcType=INTEGER},-->
+      <!--</if>-->
+    <!--</set>-->
+    <!--where technology_id = #{technologyId,jdbcType=VARCHAR}-->
+  <!--</update>-->
 </mapper>
