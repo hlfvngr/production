@@ -5,6 +5,8 @@ public class Work {
 
     private String processNumber;
 
+    private String productId;
+
     private Product workProduct;
 
     private Process workProcess;
@@ -27,6 +29,14 @@ public class Work {
 
     public void setProcessNumber(String processNumber) {
         this.processNumber = processNumber == null ? null : processNumber.trim();
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public Product getWorkProduct() {
