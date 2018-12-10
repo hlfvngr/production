@@ -1,10 +1,5 @@
 package com.cskaoyan.erp.controller;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
-
 import com.cskaoyan.erp.bean.Department;
 import com.cskaoyan.erp.service.DepartmentService;
 import com.cskaoyan.erp.utils.PageModel;
@@ -13,6 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.validation.Valid;
+
 
 @Controller("departmentController")
 @RequestMapping("/department")
@@ -31,21 +32,26 @@ public class DepartmentController {
 		return "department_add";
 	}
 
-	@RequestMapping(value="/insert")
+	@RequestMapping("/insert")
 	@ResponseBody
-	public String insert(@Valid Department department, MultipartFile multipartFile, BindingResult bindingResult) {
-
+	public Map<String,Object> insert(@Valid Department department, MultipartFile multipartFile, BindingResult bindingResult){
+		Map<String,Object> result = new HashMap<String, Object>();
 		if(bindingResult.hasErrors()){
-			return "department_add";
+			return null;
 		}
-		else{
-			boolean b = departmentService.insertDepartment(department);
-			if(b){
-				return "department_list";
-			}else {
-				return "department_add";
-			}
+		//multipartFile
+		boolean b = departmentService.insertDepartment(department);
+		if(b){
+			result.put("status",200);
+			result.put("msg","OK");
+			result.put("data",null);
+		}else {
+			result.put("status",100);
+			result.put("msg","fail");
+			result.put("data",null);
 		}
+
+		return result;
 	}
 
 	//修改部门
@@ -62,32 +68,48 @@ public class DepartmentController {
 
 
 	@RequestMapping("/update_note")
-	public String update_note(@RequestBody Department department){
+	@ResponseBody
+	public Map<String,Object> update_note(@Valid Department department, BindingResult bindingResult){
+		Map<String,Object> result = new HashMap<String, Object>();
 		//合法性校验
+		if(bindingResult.hasErrors()){
+			return null;
+		}
 		boolean ret = departmentService.updateDepartmentNote(department);
 		if(ret){
-			return "department_list";
+			result.put("status",200);
+			result.put("msg","OK");
+			result.put("data",null);
 		}else {
-			return "forward:/update_note";
+			result.put("status",100);
+			result.put("msg","fail");
+			result.put("data",null);
 		}
+		return result;
 	}
 
 	@RequestMapping("/update_all")
 	@ResponseBody
-	public String update_all(@Valid Department department,MultipartFile multipartFile,BindingResult bindingResult){
+	public Map<String,Object> update_all( @Valid Department department,MultipartFile multipartFile,BindingResult bindingResult){
+		Map<String,Object> result = new HashMap<String, Object>();
 		if(bindingResult.hasErrors()){
-			return "department_edit";
-		}else {
-			boolean b = departmentService.updateDepartment(department);
-			if(b){
-				return "department_list";
-			}else {
-				return "department_edit";
-			}
+			return null;
 		}
+		//multipartFile
+		boolean b = departmentService.updateDepartment(department);
+		if(b){
+			result.put("status",200);
+			result.put("msg","OK");
+			result.put("data",null);
+		}else {
+			result.put("status",100);
+			result.put("msg","fail");
+			result.put("data",null);
+		}
+		return result;
 	}
 
-
+	//查找部门
 	@RequestMapping("/find")
 	public String find() {
 		return "department_list";
@@ -97,9 +119,13 @@ public class DepartmentController {
 
 	@RequestMapping("/list")
 	@ResponseBody
-	public List<Department> list(PageModel pageModel){
+	public Map<String,Object> list(PageModel pageModel){
+		Map<String,Object> result = new HashMap<String, Object>();
 		Department department = new Department();
-		return departmentService.findAllDepartment(department,pageModel);
+		List<Department> departments = departmentService.findAllDepartment(department, pageModel);
+		result.put("rows",departments);
+		result.put("total",departments.size());
+		return result;
 	}
 
 
@@ -115,22 +141,28 @@ public class DepartmentController {
 	//根据部门id查找
 	@RequestMapping("/search_department_by_departmentId")
 	@ResponseBody
-	public  List<Department> search_department_by_departmentId(String searchValue, PageModel pageModel){
+	public Map<String,Object> search_department_by_departmentId(String searchValue, PageModel pageModel){
+		Map<String,Object> result = new HashMap<String, Object>();
 		Department department = new Department();
 		department.setDepartmentId(searchValue);
 		List<Department> departments = departmentService.findAllDepartment(department, pageModel);
-		return departments;
+		result.put("rows",departments);
+		result.put("total",departments.size());
+		return result;
 	}
 
 
 	//根据部门名称查找
 	@RequestMapping("/search_department_by_departmentName")
 	@ResponseBody
-	public  List<Department> search_department_by_departmentName(String searchValue, PageModel pageModel){
+	public Map<String,Object> search_department_by_departmentName(String searchValue, PageModel pageModel){
+		Map<String,Object> result = new HashMap<String, Object>();
 		Department department = new Department();
 		department.setDepartmentName(searchValue);
 		List<Department> departments = departmentService.findAllDepartment(department, pageModel);
-		return departments;
+		result.put("rows",departments);
+		result.put("total",departments.size());
+		return result;
 	}
 
 
@@ -151,14 +183,20 @@ public class DepartmentController {
 
 	@RequestMapping("/delete_batch")
 	@ResponseBody
-	public String delete_batch(@RequestBody @RequestParam("ids") String ids_str){
+	public Map<String,Object> delete_batch(@RequestBody @RequestParam("ids") String ids_str){
+		Map<String,Object> result = new HashMap<String, Object>();
 		String[] ids = ids_str.split(",");
 		//验证合法性
 		boolean ret = departmentService.deleteDepartment(ids);
 		if(ret){
-			return "department_list";
+			result.put("status",200);
+			result.put("msg","OK");
+			result.put("data",null);
 		}else {
-			return "department_list";
+			result.put("status",100);
+			result.put("msg","fail");
+			result.put("data",null);
 		}
+		return result;
 	}
 }

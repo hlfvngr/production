@@ -1,11 +1,13 @@
 package com.cskaoyan.erp.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
 
-import com.cskaoyan.erp.bean.*;
+import com.cskaoyan.erp.bean.Department;
 import com.cskaoyan.erp.bean.Employee;
 import com.cskaoyan.erp.service.EmployeeService;
 import com.cskaoyan.erp.service.DepartmentService;
@@ -37,21 +39,27 @@ public class EmployeeController {
 
 	@RequestMapping("/insert")
 	@ResponseBody
-	public String insert(@Valid Employee employee, MultipartFile multipartFile, BindingResult bindingResult){
-
+	public Map<String,Object> insert(@Valid Employee employee, MultipartFile multipartFile, BindingResult bindingResult){
+		Map<String,Object> result = new HashMap<String, Object>();
 		if(bindingResult.hasErrors()){
-			return "employee_add";
-		}else {
-			//multipartFile
-			boolean b = employeeService.insertEmployee(employee);
-			if(b){
-				return "employee_list";
-			}else {
-				return "employee_add";
-			}
+			return null;
 		}
+		//multipartFile
+		boolean b = employeeService.insertEmployee(employee);
+		if(b){
+			result.put("status",200);
+			result.put("msg","OK");
+			result.put("data",null);
+		}else {
+			result.put("status",100);
+			result.put("msg","fail");
+			result.put("data",null);
+		}
+
+		return result;
 	}
 
+	//修改雇员
 	@RequestMapping("/edit_judge")
 	@ResponseBody
 	public void edit_judge(){}
@@ -64,29 +72,44 @@ public class EmployeeController {
 
 	@RequestMapping("/update_note")
 	@ResponseBody
-	public String update_note(@Valid Employee employee){
+	public Map<String,Object> update_note(@Valid Employee employee,BindingResult bindingResult){
+		Map<String,Object> result = new HashMap<String, Object>();
 		//合法性校验
+		if(bindingResult.hasErrors()){
+			return null;
+		}
 		boolean ret = employeeService.updateEmployeeNote(employee);
 		if(ret){
-			return "employee_list";
+			result.put("status",200);
+			result.put("msg","OK");
+			result.put("data",null);
 		}else {
-			return "forward:/update_note";
+			result.put("status",100);
+			result.put("msg","fail");
+			result.put("data",null);
 		}
+		return result;
 	}
 
 	@RequestMapping(value="/update_all")
 	@ResponseBody
-	public String update_all(@RequestBody @Valid Employee employee, MultipartFile multipartFile, BindingResult bindingResult){
+	public Map<String,Object> update_all( @Valid Employee employee,MultipartFile multipartFile,BindingResult bindingResult){
+		Map<String,Object> result = new HashMap<String, Object>();
 		if(bindingResult.hasErrors()){
-			return "employee_edit";
-		}else {
-			boolean b = employeeService.updateEmployee(employee);
-			if(b){
-				return "employee_list";
-			}else {
-				return "employee_edit";
-			}
+			return null;
 		}
+		//multipartFile
+		boolean b = employeeService.updateEmployee(employee);
+		if(b){
+			result.put("status",200);
+			result.put("msg","OK");
+			result.put("data",null);
+		}else {
+			result.put("status",100);
+			result.put("msg","fail");
+			result.put("data",null);
+		}
+		return result;
 	}
 
 
@@ -97,9 +120,13 @@ public class EmployeeController {
 
 	@RequestMapping("/list")
 	@ResponseBody
-	public List<Employee> list(PageModel pageModel){
+	public Map<String,Object> list(PageModel pageModel){
+		Map<String,Object> result = new HashMap<String, Object>();
 		Employee employee = new Employee();
-		return employeeService.findAllEmployee(employee,pageModel);
+		List<Employee> employees = employeeService.findAllEmployee(employee, pageModel);
+		result.put("rows",employees);
+		result.put("total",employees.size());
+		return result;
 	}
 
 	@RequestMapping("/get/{empId}")
@@ -113,32 +140,41 @@ public class EmployeeController {
 	//根据员工id查找
 	@RequestMapping("/search_employee_by_employeeId")
 	@ResponseBody
-	public  List<Employee> search_employee_by_employeeId(String searchValue, PageModel pageModel){
+	public  Map<String,Object> search_employee_by_employeeId(String searchValue, PageModel pageModel){
+		Map<String,Object> result = new HashMap<String, Object>();
 		Employee employee = new Employee();
 		employee.setEmpId(searchValue);
 		List<Employee> employees = employeeService.findAllEmployee(employee, pageModel);
-		return employees;
+		result.put("rows",employees);
+		result.put("total",employees.size());
+		return result;
 	}
 
 	//根据员工姓名查找
 	@RequestMapping("/search_employee_by_employeeName")
 	@ResponseBody
-	public  List<Employee> search_employee_by_employeeName(String searchValue, PageModel pageModel){
+	public Map<String,Object> search_employee_by_employeeName(String searchValue, PageModel pageModel){
+		Map<String,Object> result = new HashMap<String, Object>();
 		Employee employee = new Employee();
 		employee.setEmpName(searchValue);
 		List<Employee> employees = employeeService.findAllEmployee(employee, pageModel);
-		return employees;
+		result.put("rows",employees);
+		result.put("total",employees.size());
+		return result;
 	}
 
 
 	//根据部门名称查找
 	@RequestMapping("/search_department_by_departmentName")
 	@ResponseBody
-	public  List<Department> search_department_by_departmentName(String searchValue, PageModel pageModel){
+	public Map<String,Object> search_department_by_departmentName(String searchValue, PageModel pageModel){
+		Map<String,Object> result = new HashMap<String, Object>();
 		Department department = new Department();
 		department.setDepartmentName(searchValue);
 		List<Department> departments = departmentService.findAllDepartment(department, pageModel);
-		return departments;
+		result.put("rows",departments);
+		result.put("total",departments.size());
+		return result;
 	}
 
 	//获得所有商品的信息
@@ -155,15 +191,21 @@ public class EmployeeController {
 
 	@RequestMapping("/delete_batch")
 	@ResponseBody
-	public String delete_batch(@RequestParam("ids") String ids_str){
+	public Map<String,Object> delete_batch(@RequestBody @RequestParam("ids") String ids_str){
+		Map<String,Object> result = new HashMap<String, Object>();
 		String[] ids = ids_str.split(",");
 		//验证合法性
 		boolean ret = employeeService.deleteEmployee(ids);
 		if(ret){
-			return "employee_list";
+			result.put("status",200);
+			result.put("msg","OK");
+			result.put("data",null);
 		}else {
-			return "employee_list";
+			result.put("status",100);
+			result.put("msg","fail");
+			result.put("data",null);
 		}
+		return result;
 	}
 
 
