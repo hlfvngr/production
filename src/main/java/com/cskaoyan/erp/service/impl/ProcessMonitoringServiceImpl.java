@@ -511,5 +511,13 @@ public class ProcessMonitoringServiceImpl implements ProcessMonitoringService {
         return process;
     }
 
+    @Override
+    public List<Process> findAllProcess() {
+
+        List<Process> processList=processMapper.findAllProcess();
+
+        return processList;
+    }
+
 
 }

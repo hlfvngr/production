@@ -106,4 +106,13 @@ public interface ProcessMapper {
     @ResultMap("com.cskaoyan.erp.mapper.ProcessMapper.BaseResultMap")
     Process selectByPrimaryKey(String processId);
 
+
+    @Select({
+            "select",
+            "process_id, technology_plan_id, sequence, quota",
+            "from process"
+    })
+    @ResultMap("com.cskaoyan.erp.mapper.ProcessMapper.BaseResultMap")
+    List<Process> findAllProcess();
+
 }

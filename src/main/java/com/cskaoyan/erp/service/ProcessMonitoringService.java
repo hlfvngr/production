@@ -78,4 +78,6 @@ public interface ProcessMonitoringService {
     public TechnologyPlanVO getTechnologyPlanById(String technologyPlanId);
 
     public Process getProcessById(String processId);
+
+    public List<Process> findAllProcess();
 }
