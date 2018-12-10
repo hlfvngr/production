@@ -11,7 +11,6 @@ import com.cskaoyan.erp.utils.PageModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -135,31 +134,14 @@ public class DepartmentController {
 	}
 
 
-//	@RequestMapping("/get_data")
-//	@ResponseBody
-//	public List<Department> getData() throws Exception{
-//		return departmentService.find();
-//	}
-//
+	//获得所有商品的信息
+	@RequestMapping("/get_data")
+	@ResponseBody
+	public List<Department> get_data(){
+		return departmentService.findAllDepartment();
+	}
 
 
-
-//	@RequestMapping(value="/update_note")
-//	@ResponseBody
-//	private CustomResult updateNote(@Valid Department department, BindingResult bindingResult) throws Exception {
-//		if(bindingResult.hasErrors()){
-//			FieldError fieldError = bindingResult.getFieldError();
-//			return CustomResult.build(100, fieldError.getDefaultMessage());
-//		}
-//		return departmentService.updateNote(department);
-//	}
-//
-//	@RequestMapping(value="/delete")
-//	@ResponseBody
-//	private CustomResult delete(String id) throws Exception {
-//		CustomResult result = departmentService.delete(id);
-//		return result;
-//	}
 
 	//删除部门
 	@RequestMapping("/delete_judge")
