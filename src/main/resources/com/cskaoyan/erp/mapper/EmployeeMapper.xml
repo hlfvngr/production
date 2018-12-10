@@ -193,4 +193,8 @@
     </where>
     limit #{limit} offset #{offset};
   </select>
+
+  <select id="getEmp" resultType="string" parameterType="java.lang.String">
+    select emp_name from employee where emp_id=#{id}
+  </select>
 </mapper>
