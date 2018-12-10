@@ -14,6 +14,7 @@ import java.util.Map;
  * Method:
  */
 public interface MaterialReceiveService {
+
     Map deleteByReceiveId(String[] materialReceiveIds);
 
     Map insert(MaterialReceive materialReceive);

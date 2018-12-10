@@ -15,6 +15,7 @@ import java.util.Map;
  * Method:
  */
 public interface MaterialService {
+
     Map deleteByMaterialId(String[] materialIds);
 
     Map insert(Material material);

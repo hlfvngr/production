@@ -144,7 +144,6 @@ public class MaterialConsumeController {
     public Map list(@RequestParam Integer page, Integer rows,
                                 HttpServletRequest request){
         MaterialConsume materialConsume = new MaterialConsume();
-
         return materialConsumeService.findMaterialConsumesByPage(materialConsume, page, rows);
     }
 
@@ -190,7 +189,6 @@ public class MaterialConsumeController {
     @RequestMapping("update_note")
     @ResponseBody
     public Map update_note(MaterialConsume materialConsume){
-
         return materialConsumeService.updateByConsumeId(materialConsume);
     }
 }

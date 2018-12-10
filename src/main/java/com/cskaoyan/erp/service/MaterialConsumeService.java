@@ -20,6 +20,7 @@ import java.util.Map;
  * Method:
  */
 public interface MaterialConsumeService {
+
     Map deleteByConsumeId(String[] consumeIds);
 
     Map insert(MaterialConsume materialConsume);

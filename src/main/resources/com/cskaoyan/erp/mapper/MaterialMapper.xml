@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cskaoyan.erp.mapper.MaterialMapper">
+
   <resultMap id="materialResultMap" type="com.cskaoyan.erp.bean.Material">
     <id column="material_id" jdbcType="VARCHAR" property="materialId" />
     <result column="material_type" jdbcType="VARCHAR" property="materialType" />
@@ -8,9 +9,11 @@
     <result column="remaining" jdbcType="INTEGER" property="remaining" />
     <result column="note" jdbcType="VARCHAR" property="note" />
   </resultMap>
+
   <sql id="Base_Column_List">
     material_id, material_type, status, remaining, note
   </sql>
+
   <!--1、增-->
   <insert id="insert" parameterType="com.cskaoyan.erp.bean.Material">
     insert into material

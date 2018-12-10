@@ -16,6 +16,9 @@ import java.util.Map;
  */
 public interface CustomService {
 
+    //findCustomByName(String searchValue);
+
+
     Map deleteByCustomId(String[] customIds);
 
     Map insert(Customer customer);

@@ -114,12 +114,10 @@ public class MaterialConsumeServiceImpl implements MaterialConsumeService {
 
     @Transactional(readOnly = true)
     @Override
-    public Map findMaterialConsumesByPage(MaterialConsume materialConsume, Integer page , Integer rows) {
-        HashMap<String, Object> map = new HashMap<>();
+    public Map findMaterialConsumesByPage(MaterialConsume materialConsume, Integer page, Integer rows) {
         PageModel pageModel = new PageModel();
         List<MaterialConsume> materialConsumes = new ArrayList<>();
-
-
+        HashMap<String, Object> map = new HashMap<>();
         map.put("materialConsume",materialConsume);
 
         int recordCount = materialConsumeMapper.count(map);
@@ -151,8 +149,8 @@ public class MaterialConsumeServiceImpl implements MaterialConsumeService {
     public Integer count(MaterialConsume materialConsume) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("materialConsume",materialConsume);
-
         Integer count = materialConsumeMapper.count(map);
+
         return count.intValue();
     }
 }

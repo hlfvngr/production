@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cskaoyan.erp.mapper.MaterialConsumeMapper">
+
   <resultMap id="materialConsumeMap" type="com.cskaoyan.erp.bean.MaterialConsume">
     <id column="consume_id" jdbcType="VARCHAR" property="consumeId" />
     <result column="consume_amount" jdbcType="INTEGER" property="consumeAmount" />
@@ -8,14 +9,25 @@
     <result column="sender" jdbcType="VARCHAR" property="sender" />
     <result column="receiver" jdbcType="VARCHAR" property="receiver" />
     <result column="note" jdbcType="VARCHAR" property="note" />
+
     <collection property="work" ofType="com.cskaoyan.erp.bean.Work">
       <id column="work_id" jdbcType="VARCHAR" property="workId" />
       <result column="process_number" jdbcType="VARCHAR" property="processNumber" />
-      <result column="product_id" jdbcType="VARCHAR" property="productId" />
-      <result column="process_id" jdbcType="VARCHAR" property="processId" />
-      <result column="device_id" jdbcType="VARCHAR" property="deviceId" />
       <result column="rating" jdbcType="INTEGER" property="rating" />
+
+      <association property="workDevice" column="device_id" javaType="com.cskaoyan.erp.bean.Device"
+                   select="com.cskaoyan.erp.mapper.DeviceMapper.selectByPrimaryKey">
+      </association>
+
+      <association property="workProduct" column="product_id" javaType="com.cskaoyan.erp.bean.Product"
+                   select="com.cskaoyan.erp.mapper.ProductMapper.selectByPrimaryKey">
+      </association>
+
+      <association property="workProcess" column="process_id" javaType="com.cskaoyan.erp.bean.Process"
+                   select="com.cskaoyan.erp.mapper.ProcessMapper.selectByPrimaryKey">
+      </association>
     </collection>
+
     <collection property="material" ofType="com.cskaoyan.erp.bean.Material">
       <id column="material_id" jdbcType="VARCHAR" property="materialId" />
       <result column="material_type" jdbcType="VARCHAR" property="materialType" />
@@ -23,11 +35,13 @@
       <result column="remaining" jdbcType="INTEGER" property="remaining" />
       <result column="note" jdbcType="VARCHAR" property="note" />
     </collection>
+
   </resultMap>
+
   <sql id="Base_Column_List">
-    consume_id, work_id, material_id, consume_amount, consume_date, sender, receiver, 
-    note
+    consume_id, work_id, material_id, consume_amount, consume_date, sender, receiver, note
   </sql>
+
   <!--1、增-->
   <insert id="insert" parameterType="com.cskaoyan.erp.bean.MaterialConsume">
     insert into material_consume
@@ -84,6 +98,7 @@
       </if>
     </trim>
   </insert>
+
   <!--2、改-->
   <update id="updateByConsumeId" parameterType="com.cskaoyan.erp.bean.MaterialConsume">
     update material_consume
