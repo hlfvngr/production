@@ -54,7 +54,7 @@ public class ManufactureController {
     @RequestMapping("/search_manufacture_by_manufactureOrderId")
     @ResponseBody
     public List<Manufacture> search_manufacture_by_manufactureOrderId(String searchValue,PageModel pageModel){
-        Order order = orderService.finOrderById(searchValue);
+        Order order = orderService.findOrderById(searchValue);
         Manufacture manufacture = new Manufacture();
         manufacture.setOrder(order);
         List<Manufacture> manufactures = manufactureService.findManufacture(manufacture, pageModel);
