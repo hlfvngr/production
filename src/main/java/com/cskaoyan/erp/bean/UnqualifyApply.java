@@ -1,26 +1,65 @@
 package com.cskaoyan.erp.bean;
 
+import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 public class UnqualifyApply {
+
+    @NotEmpty(message = "表单还未填写完成")
     private String unqualifyApplyId;
 
+    @NotNull(message = "表单还未填写完成")
     private String productId;
 
     private String unqualifyItem;
 
     private Integer unqualifyCount;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date assemblyDate;
 
+    @NotNull(message = "表单还未填写完成")
     private String empId;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date applyDate;
 
     private String note;
 
     public String getUnqualifyApplyId() {
         return unqualifyApplyId;
+    }
+
+    public UnqualifyApply() {
+    }
+
+    public UnqualifyApply(String unqualifyApplyId, String productId, String unqualifyItem, Integer unqualifyCount, Date assemblyDate, String empId, Date applyDate, String note) {
+        this.unqualifyApplyId = unqualifyApplyId;
+        this.productId = productId;
+        this.unqualifyItem = unqualifyItem;
+        this.unqualifyCount = unqualifyCount;
+        this.assemblyDate = assemblyDate;
+        this.empId = empId;
+        this.applyDate = applyDate;
+        this.note = note;
+    }
+
+    @Override
+    public String toString() {
+        return "UnqualifyApply{" +
+                "unqualifyApplyId='" + unqualifyApplyId + '\'' +
+                ", productId='" + productId + '\'' +
+                ", unqualifyItem='" + unqualifyItem + '\'' +
+                ", unqualifyCount=" + unqualifyCount +
+                ", assemblyDate=" + assemblyDate +
+                ", empId='" + empId + '\'' +
+                ", applyDate=" + applyDate +
+                ", note='" + note + '\'' +
+                '}';
     }
 
     public void setUnqualifyApplyId(String unqualifyApplyId) {
@@ -32,7 +71,7 @@ public class UnqualifyApply {
     }
 
     public void setProductId(String productId) {
-        this.productId = productId == null ? null : productId.trim();
+        this.productId = productId;
     }
 
     public String getUnqualifyItem() {
@@ -64,7 +103,7 @@ public class UnqualifyApply {
     }
 
     public void setEmpId(String empId) {
-        this.empId = empId == null ? null : empId.trim();
+        this.empId = empId;
     }
 
     public Date getApplyDate() {

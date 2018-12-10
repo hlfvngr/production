@@ -1,5 +1,7 @@
 package com.cskaoyan.erp.bean;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class FinalMeasureCheck {
@@ -9,6 +11,7 @@ public class FinalMeasureCheck {
 
     private String checkItem;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date cdate;
 
     private String measureData;

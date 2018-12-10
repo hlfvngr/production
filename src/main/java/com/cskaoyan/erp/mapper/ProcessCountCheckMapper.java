@@ -1,7 +1,11 @@
 package com.cskaoyan.erp.mapper;
 
 import com.cskaoyan.erp.bean.ProcessCountCheck;
+import com.cskaoyan.erp.utils.PageModel;
+import com.cskaoyan.erp.bean.vo.ProcessCountListVO;
 import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 public interface ProcessCountCheckMapper {
     @Delete({
@@ -56,4 +60,12 @@ public interface ProcessCountCheckMapper {
         "where p_count_check_id = #{pCountCheckId,jdbcType=VARCHAR}"
     })
     int updateByPrimaryKey(ProcessCountCheck record);
+
+    List<ProcessCountListVO> selectByPageAndRows(PageModel pageModel);
+
+    Integer count();
+
+    List<ProcessCountListVO> selectByPMeasureId(String searchValue, PageModel pageModel);
+
+    Integer selectCountByPCountId(String searchValue);
 }
