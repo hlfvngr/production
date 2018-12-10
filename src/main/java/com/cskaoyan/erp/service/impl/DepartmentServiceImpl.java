@@ -18,6 +18,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {

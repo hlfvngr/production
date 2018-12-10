@@ -141,6 +141,13 @@ public class EmployeeController {
 		return departments;
 	}
 
+	//获得所有商品的信息
+	@RequestMapping("/get_data")
+	@ResponseBody
+	public List<Employee> get_data(){
+		return employeeService.findAllEmployee();
+	}
+
 	//删除员工
 	@RequestMapping("/delete_judge")
 	@ResponseBody
