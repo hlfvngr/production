@@ -1,7 +1,12 @@
 package com.cskaoyan.erp.mapper;
 
 import com.cskaoyan.erp.bean.FinalCountCheck;
+import com.cskaoyan.erp.utils.PageModel;
+import com.cskaoyan.erp.bean.vo.FinalCountListVO;
 import org.apache.ibatis.annotations.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public interface FinalCountCheckMapper {
     @Delete({
@@ -56,4 +61,16 @@ public interface FinalCountCheckMapper {
         "where f_count_check_id = #{fCountCheckId,jdbcType=VARCHAR}"
     })
     int updateByPrimaryKey(FinalCountCheck record);
+
+    Integer count();
+
+    ArrayList<FinalCountListVO> selectByPageAndRows(PageModel pageModel);
+
+    Integer searchCountByCountId(String searchValue);
+
+    List<FinalCountListVO> searchByCountId(@Param("searchValue") String searchValue, @Param("pageModel") PageModel pageModel);
+
+    Integer searchCountByOrderId(String searchValue);
+
+    List<FinalCountListVO> searchByOrderId(@Param("searchValue") String searchValue, @Param("pageModel") PageModel pageModel);
 }
