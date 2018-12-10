@@ -213,5 +213,15 @@ public class ProcessController {
 
     }
 
+    /**工序质检新增回显*/
+    @ResponseBody
+    @RequestMapping("/process/get_data")
+    public List<Process> getProcessData(){
+
+        List<Process> processList=processMonitoringService.findAllProcess();
+
+        return processList;
+    }
+
 
 }
