@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface OrderService {
 
+    List<Order> findAllOrder();
+
     List<Order> findAllOrder(Order order, PageModel pageModel);
 
     boolean insertOrder(Order order);
@@ -17,5 +19,5 @@ public interface OrderService {
 
     boolean deleteOrder(String[] ids);
 
-    Order finOrderById(String searchValue);
+    Order findOrderById(String searchValue);
 }
