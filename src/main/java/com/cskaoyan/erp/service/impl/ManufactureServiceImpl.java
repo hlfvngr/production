@@ -24,7 +24,7 @@ public class ManufactureServiceImpl implements ManufactureService {
     public List<Manufacture> findManufacture(Manufacture manufacture, PageModel pageModel) {
         Map<String,Object> map = new HashMap<String, Object>();
         map.put("manufactureSn",manufacture.getManufactureSn());
-        map.put("order",manufacture.getOrder());
+        map.put("order",manufacture.getcOrder());
         map.put("technology",manufacture.getTechnology());
         int count = manufactureMapper.count(map);
         if(count == 0){

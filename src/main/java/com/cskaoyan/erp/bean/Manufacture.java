@@ -5,7 +5,7 @@ import java.util.Date;
 public class Manufacture {
     private String manufactureSn;
 
-    private Order order;
+    private Order cOrder;
 
     private Technology technology;
 
@@ -23,12 +23,12 @@ public class Manufacture {
         this.manufactureSn = manufactureSn == null ? null : manufactureSn.trim();
     }
 
-    public Order getOrder() {
-        return order;
+    public Order getcOrder() {
+        return cOrder;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setcOrder(Order cOrder) {
+        this.cOrder = cOrder;
     }
 
     public Technology getTechnology() {

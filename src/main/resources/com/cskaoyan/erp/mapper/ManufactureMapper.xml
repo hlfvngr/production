@@ -9,7 +9,7 @@
     <result column="begin_date" jdbcType="TIMESTAMP" property="beginDate" />
     <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
 
-    <association property="order" javaType="com.cskaoyan.erp.bean.Order">
+    <association property="cOrder" javaType="com.cskaoyan.erp.bean.Order">
       <id column="order_id" jdbcType="VARCHAR" property="orderId" />
       <result column="order_date" jdbcType="TIMESTAMP" property="orderDate" />
       <result column="request_date" jdbcType="TIMESTAMP" property="requestDate" />
@@ -21,7 +21,7 @@
       <result column="file" jdbcType="VARCHAR" property="file" />
       <result column="status" jdbcType="INTEGER" property="status" />
       <association column="custom_id" property="orderCustom"
-                   select="com.cskaoyan.erp.mapper.CustomerMapper.selectByPrimaryKey"/>
+                   select="com.cskaoyan.erp.mapper.CustomerMapper.selectByCustomId"/>
       <association column="product_id"  property="orderProduct"
                    select="com.cskaoyan.erp.mapper.ProductMapper.selectByPrimaryKey"/>
     </association>
@@ -90,8 +90,8 @@
   <update id="updateByPrimaryKey" parameterType="com.cskaoyan.erp.bean.Manufacture">
     update manufacture
     <set>
-      <if test="order != null">
-        order_id = #{order.orderId,jdbcType=VARCHAR},
+      <if test="cOrder != null">
+        order_id = #{cOrder.orderId,jdbcType=VARCHAR},
       </if>
       <if test="technology != null">
         technology_id = #{technology.technologyId,jdbcType=VARCHAR},
@@ -112,7 +112,7 @@
   <insert id="insert">
         insert into manufacture
         (manufacture_sn, order_id, technology_id, launch_quantity, begin_date, end_date)
-        values (#{manufactureSn,jdbcType=VARCHAR}, #{order.orderId,jdbcType=VARCHAR},
+        values (#{manufactureSn,jdbcType=VARCHAR}, #{cOrder.orderId,jdbcType=VARCHAR},
         #{technology.technologyId,jdbcType=VARCHAR}, #{launchQuantity,jdbcType=INTEGER},
         #{beginDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP})
   </insert>
@@ -124,7 +124,7 @@
           and m.manufacture_sn = #{manufactureSn}
         </if>
        <if test="order != null">
-         and m.order_id = #{order.orderId}
+         and m.order_id = #{cOrder.orderId}
        </if>
        <if test="technology != null">
         and t.technology_name = "%"#{technology.technologyName}"%"
@@ -148,8 +148,8 @@
        <if test="manufactureSn != null and manufactureSn != '' ">
          and m.manufacture_sn = #{manufactureSn}
        </if>
-       <if test="order != null">
-         and m.order_id = #{order.orderId}
+       <if test="cOrder != null">
+         and m.order_id = #{cOrder.orderId}
        </if>
        <if test="technology != null">
          and t.technology_name = "%"#{technology.technologyName}"%"

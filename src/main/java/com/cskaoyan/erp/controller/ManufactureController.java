@@ -68,7 +68,7 @@ public class ManufactureController {
         order.setOrderId(searchValue);
 
         Manufacture manufacture = new Manufacture();
-        manufacture.setOrder(order);
+        manufacture.setcOrder(order);
         List<Manufacture> manufactures = manufactureService.findManufacture(manufacture, pageModel);
 
         result.put("rows",manufactures);

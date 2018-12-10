@@ -12,7 +12,7 @@
       <result column="launch_quantity" jdbcType="INTEGER" property="launchQuantity" />
       <result column="begin_date" jdbcType="TIMESTAMP" property="beginDate" />
       <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
-      <association column="order_id" property="order"
+      <association column="order_id" property="cOrder"
                    select="com.cskaoyan.erp.mapper.OrderMapper.selectByPrimaryKey"/>
       <association column="technology_id" property="technology"
                    select="com.cskaoyan.erp.mapper.TechnologyMapper.selectByPrimaryKey"/>

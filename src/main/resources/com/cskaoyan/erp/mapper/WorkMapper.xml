@@ -20,8 +20,9 @@
       <id column="process_id" jdbcType="VARCHAR" property="processId" />
       <result column="sequence" jdbcType="INTEGER" property="sequence" />
       <result column="quota" jdbcType="INTEGER" property="quota" />
-      <association column="technology_plan_id" property="technologyPlan"
-                   select="com.cskaoyan.erp.mapper.TechnologyPlanMapper.selectByPrimaryKey"/>
+      <result column="technology_plan_id" property="technologyPlanId"/>
+      <!--<association column="technology_plan_id" property="technologyPlan"-->
+                   <!--select="com.cskaoyan.erp.mapper.TechnologyPlanMapper.searchByPlanId"/>-->
     </association>
 
     <association  property="workDevice" javaType="com.cskaoyan.erp.bean.Device">
@@ -34,9 +35,10 @@
       <result column="device_manufacture_date" jdbcType="TIMESTAMP" property="deviceManufactureDate" />
       <result column="device_service_life" jdbcType="TIMESTAMP" property="deviceServiceLife" />
       <result column="device_keeper_id" jdbcType="VARCHAR" property="deviceKeeperId" />
-      <result column="note" jdbcType="VARCHAR" property="note" />
-      <association column="device_type_id"  property="deviceType"
-                   select="com.cskaoyan.erp.mapper.DeviceTypeMapper.selectByPrimaryKey"/>
+      <result column="dNote" jdbcType="VARCHAR" property="note" />
+      <result column="device_type_id" property="deviceTypeId"/>
+      <!--<association column="device_type_id"  property="deviceType"
+                   select="com.cskaoyan.erp.mapper.DeviceTypeMapper.getDeviceTypeById"/>-->
     </association>
 
   </resultMap>
@@ -129,10 +131,10 @@
 
   <sql id="join">
      w.work_id, w.process_number, w.product_id, w.process_id, w.device_id, w.rating,
-       pd.product_id, pd.product_name, pd.product_type, pd.image, pd.note, pd.`status`,
+       pd.product_id, pd.product_name, pd.product_type, pd.image, pd.note, pd.status,
        p.process_id, p.technology_plan_id, p.sequence, p.quota,
        d.device_id, d.device_name, d.device_type_id, d.device_status_id, d.device_status, d.device_purchase_date,
-       d.device_purchase_price, d.device_manufacture_date, d.device_service_life, d.device_keeper_id, d.note
+       d.device_purchase_price, d.device_manufacture_date, d.device_service_life, d.device_keeper_id, d.note as dNote
        from `work` w left join product pd on w.product_id = pd.product_id
       left join process p on w.process_id = p.process_id
       left join device d on w.device_id = d.device_id
