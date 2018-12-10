@@ -27,7 +27,7 @@
     emp_id, emp_name, sex, id_code, birthday, join_date, status, education, degree, major,
     graduate_school, education_form, department_id
   </sql>
-  <insert id="insertSelective" parameterType="com.cskaoyan.erp.bean.Employee">
+  <insert id="insert" parameterType="com.cskaoyan.erp.bean.Employee">
     insert into employee
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="empId != null">
@@ -66,7 +66,7 @@
       <if test="educationForm != null">
         education_form,
       </if>
-      <if test="departmentId != null">
+      <if test="department != null">
         department_id,
       </if>
     </trim>
@@ -107,8 +107,8 @@
       <if test="educationForm != null">
         #{educationForm,jdbcType=VARCHAR},
       </if>
-      <if test="departmentId != null">
-        #{departmentId,jdbcType=VARCHAR},
+      <if test="department != null">
+        #{department.departmentId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
