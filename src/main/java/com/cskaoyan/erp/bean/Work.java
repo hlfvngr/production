@@ -5,11 +5,11 @@ public class Work {
 
     private String processNumber;
 
-    private String productId;
+    private Product workProduct;
 
-    private String processId;
+    private Process workProcess;
 
-    private String deviceId;
+    private Device workDevice;
 
     private Integer rating;
 
@@ -29,28 +29,28 @@ public class Work {
         this.processNumber = processNumber == null ? null : processNumber.trim();
     }
 
-    public String getProductId() {
-        return productId;
+    public Product getWorkProduct() {
+        return workProduct;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId == null ? null : productId.trim();
+    public void setWorkProduct(Product workProduct) {
+        this.workProduct = workProduct;
     }
 
-    public String getProcessId() {
-        return processId;
+    public Process getWorkProcess() {
+        return workProcess;
     }
 
-    public void setProcessId(String processId) {
-        this.processId = processId == null ? null : processId.trim();
+    public void setWorkProcess(Process workProcess) {
+        this.workProcess = workProcess;
     }
 
-    public String getDeviceId() {
-        return deviceId;
+    public Device getWorkDevice() {
+        return workDevice;
     }
 
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId == null ? null : deviceId.trim();
+    public void setWorkDevice(Device workDevice) {
+        this.workDevice = workDevice;
     }
 
     public Integer getRating() {

@@ -116,4 +116,16 @@
        limit #{limit} offset #{offset};
   </select>
 
+  <select id="selectProductByName" resultMap="BaseResultMap">
+       select <include refid="Base_Column_List"/>from product where product_name = #{productName};
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from product where product_id = #{productId};
+  </select>
+  <!--<select id="selectByPrimaryKey" resultType="com.cskaoyan.erp.bean.Product">
+    select
+     product_id as productId, product_name as productName, product_type as productType, image, note, `status`
+     from product where product_id = #{productId};
+  </select>-->
 </mapper>

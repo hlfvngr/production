@@ -3,9 +3,9 @@ package com.cskaoyan.erp.bean;
 public class Task {
     private String taskId;
 
-    private String manufactureSn;
+    private Manufacture manufacture;
 
-    private String workId;
+    private Work work;
 
     private Integer taskQuantity;
 
@@ -19,20 +19,20 @@ public class Task {
         this.taskId = taskId == null ? null : taskId.trim();
     }
 
-    public String getManufactureSn() {
-        return manufactureSn;
+    public Manufacture getManufacture() {
+        return manufacture;
     }
 
-    public void setManufactureSn(String manufactureSn) {
-        this.manufactureSn = manufactureSn == null ? null : manufactureSn.trim();
+    public void setManufacture(Manufacture manufacture) {
+        this.manufacture = manufacture;
     }
 
-    public String getWorkId() {
-        return workId;
+    public Work getWork() {
+        return work;
     }
 
-    public void setWorkId(String workId) {
-        this.workId = workId == null ? null : workId.trim();
+    public void setWork(Work work) {
+        this.work = work;
     }
 
     public Integer getTaskQuantity() {
