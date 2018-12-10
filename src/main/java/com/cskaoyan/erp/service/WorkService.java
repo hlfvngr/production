@@ -18,4 +18,7 @@ public interface WorkService {
     boolean deleteWork(String[] ids);
 
     Work findWorkById(String workId);
+
+    List<Work> findAllWork();
+
 }

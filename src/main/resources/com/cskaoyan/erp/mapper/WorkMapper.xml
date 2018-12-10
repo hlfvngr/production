@@ -145,13 +145,13 @@
           and w.work_id = #{workId}
         </if>
         <if test="workProduct != null">
-          and w.product_id = #{workProduct.productId}
+          and pd.product_name = "%"#{workProduct.productName}"%"
         </if>
         <if test="workProcess != null">
-          and w.process_id = #{workProcess.processId}
+          and p.process_id = #{workProcess.processId}
         </if>
         <if test="workDevice != null">
-          and w.device_id = #{workDevice.deviceId}
+          and d.device_name = "%"#{workDevice.deviceName}"%"
         </if>
       </where>
       limit #{limit} offset #{offset};
@@ -165,7 +165,7 @@
   </insert>
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap">
-      select <include refid="join"/> where work_id = #{workId,jdbcType=VARCHAR};
+      select <include refid="join"/> where w.work_id = #{workId,jdbcType=VARCHAR};
   </select>
 
   <select id="selectAllWork" resultMap="BaseResultMap">

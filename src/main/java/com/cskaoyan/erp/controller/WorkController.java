@@ -1,20 +1,22 @@
 package com.cskaoyan.erp.controller;
 
+import com.cskaoyan.erp.bean.Device;
+import com.cskaoyan.erp.bean.Process;
 import com.cskaoyan.erp.bean.Product;
 import com.cskaoyan.erp.bean.Work;
+import com.cskaoyan.erp.service.DeviceListService;
 import com.cskaoyan.erp.service.ProductService;
 import com.cskaoyan.erp.service.WorkService;
 import com.cskaoyan.erp.utils.PageModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/work")
@@ -22,15 +24,6 @@ public class WorkController {
 
     @Autowired
     WorkService workService;
-
-    @Autowired
-    ProductService productService;
-
-   /* @Autowired
-    ProcessService processService;
-
-    @Autowired
-    DeviceService deviceService;*/
 
     //查找作业
     @RequestMapping("/find")
@@ -40,47 +33,93 @@ public class WorkController {
 
     @RequestMapping("/list")
     @ResponseBody
-    public List<Work> list(PageModel pageModel) {
+    public Map<String,Object> list(PageModel pageModel) {
+        Map<String,Object> result = new HashMap<>();
+
         Work work = new Work();
         List<Work> works = workService.selectWork(work,pageModel);
-        return works;
+
+        result.put("rows",works);
+        result.put("total",works.size());
+        return result;
+    }
+
+    @RequestMapping("/get/${workId}")
+    @ResponseBody
+    public Work get(@PathVariable String wordId){
+        return workService.findWorkById(wordId);
+    }
+
+    @RequestMapping("/get_data")
+    @ResponseBody
+    public List<Work> get_data(){
+        return workService.findAllWork();
     }
 
     @RequestMapping("/search_work_by_workId")
     @ResponseBody
-    public List<Work> search_work_by_workId(String searchValue,PageModel pageModel){
+    public Map<String,Object> search_work_by_workId(String searchValue,PageModel pageModel){
+        Map<String,Object> result = new HashMap<>();
+
         Work work  = new Work();
         work.setWorkId(searchValue);
         List<Work> works = workService.selectWork(work, pageModel);
-        return works;
+
+        result.put("rows",works);
+        result.put("total",works.size());
+        return result;
     }
+
     @RequestMapping("/search_work_by_workProduct")
     @ResponseBody
-    public List<Work> search_work_by_workProduct(String searchValue,PageModel pageModel){
-        Product productByName = productService.findProductByName(searchValue);
+    public Map<String,Object> search_work_by_workProduct(String searchValue,PageModel pageModel){
+        Map<String,Object> result = new HashMap<>();
+
+        Product product = new Product();
+        product.setProductName(searchValue);
+
         Work work  = new Work();
-        work.setWorkProduct(productByName);
+        work.setWorkProduct(product);
         List<Work> works = workService.selectWork(work, pageModel);
-        return works;
+
+        result.put("rows",works);
+        result.put("total",works.size());
+        return result;
     }
-    /*@RequestMapping("/search_work_by_workDevice")
+
+    @RequestMapping("/search_work_by_workDevice")
     @ResponseBody
-    public List<Work> search_work_by_workDevice(String searchValue,PageModel pageModel){
-        DeviceService deviceByName = deviceService.findDeviceByName(searchValue);
+    public Map<String,Object> search_work_by_workDevice(String searchValue,PageModel pageModel){
+        Map<String,Object> result = new HashMap<>();
+
+        Device device = new Device();
+        device.setDeviceName(searchValue);
+
         Work work  = new Work();
-        work.setWorkDevice(deviceByName);
+        work.setWorkDevice(device);
         List<Work> works = workService.selectWork(work, pageModel);
-        return works;
+
+        result.put("rows",works);
+        result.put("total",works.size());
+        return result;
     }
+
     @RequestMapping("/search_work_by_workProcess")
     @ResponseBody
-    public List<Work> search_work_by_workProcess(String searchValue,PageModel pageModel){
-        ProcessService processByName = deviceService.findProcessByName(searchValue);
+    public Map<String,Object> search_work_by_workProcess(String searchValue,PageModel pageModel){
+        Map<String,Object> result = new HashMap<>();
+
+        Process process = new Process();
+        process.setProcessId(searchValue);
+
         Work work  = new Work();
-        work.setWorkProcess(processByName);
+        work.setWorkProcess(process);
         List<Work> works = workService.selectWork(work, pageModel);
-        return works;
-    }*/
+
+        result.put("rows",works);
+        result.put("total",works.size());
+        return result;
+    }
 
     //增加作业
     @RequestMapping("/add_judge")
@@ -93,17 +132,24 @@ public class WorkController {
     }
 
     @RequestMapping("/insert")
-    public String insert(@RequestBody @Valid Work work, BindingResult bindingResult){
+    @ResponseBody
+    public Map<String,Object> insert(@RequestBody @Valid Work work, BindingResult bindingResult){
+        Map<String,Object> result = new HashMap<>();
         if(bindingResult.hasErrors()){
-            return "work_add";
-        }else {
-            boolean b = workService.insertWork(work);
-            if(b){
-                return "work_list";
-            }else {
-                return "work_add";
-            }
+            return null;
         }
+        boolean ret = workService.insertWork(work);
+        if(ret){
+            result.put("status",200);
+            result.put("msg","OK");
+            result.put("data",null);
+        }else {
+            result.put("status",100);
+            result.put("msg","fail");
+            result.put("data",null);
+        }
+        return result;
+
     }
 
     //修改作业
@@ -117,17 +163,24 @@ public class WorkController {
     }
 
     @RequestMapping("/update_all")
-    public String update_all(@RequestBody Work work ,BindingResult bindingResult){
+    @ResponseBody
+    public Map<String,Object> update_all(@RequestBody Work work ,BindingResult bindingResult){
+        Map<String,Object> result = new HashMap<>();
         if(bindingResult.hasErrors()){
-            return "work_edit";
-        }else {
-            boolean b = workService.updateWork(work);
-            if(b){
-                return "work_list";
-            }else {
-                return "work_edit";
-            }
+            return null;
         }
+        boolean ret = workService.updateWork(work);
+        if(ret){
+            result.put("status",200);
+            result.put("msg","OK");
+            result.put("data",null);
+        }else {
+            result.put("status",100);
+            result.put("msg","fail");
+            result.put("data",null);
+        }
+        return result;
+
     }
 
     //删除作业
@@ -136,13 +189,22 @@ public class WorkController {
     public void delete_judge(){}
 
     @RequestMapping("/delete_batch")
-    public String delete_batch(@RequestBody @RequestParam("ids")String ids_str){
+    @ResponseBody
+    public Map<String,Object> delete_batch(@RequestBody @RequestParam("ids")String ids_str){
+        Map<String,Object> result = new HashMap<>();
+
         String[] ids = ids_str.split(",");
-        boolean b = workService.deleteWork(ids);
-        if(b){
-            return "work_list";
+        boolean ret = workService.deleteWork(ids);
+
+        if(ret){
+            result.put("status",200);
+            result.put("msg","OK");
+            result.put("data",null);
         }else {
-            return "work_list";
+            result.put("status",100);
+            result.put("msg","fail");
+            result.put("data",null);
         }
+        return result;
     }
 }
