@@ -9,7 +9,8 @@
   <sql id="Base_Column_List">
     department_id, department_name, note
   </sql>
-  <insert id="insertSelective" parameterType="com.cskaoyan.erp.bean.Department">
+
+  <insert id="insert" parameterType="com.cskaoyan.erp.bean.Department">
     insert into department
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="departmentId != null">
@@ -34,7 +35,8 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cskaoyan.erp.bean.Department">
+
+  <update id="updateByPrimaryKey" parameterType="com.cskaoyan.erp.bean.Department">
     update department
     <set>
       <if test="departmentName != null">
@@ -46,4 +48,34 @@
     </set>
     where department_id = #{departmentId,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectAllDepartment" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/> from department;
+  </select>
+
+  <select id="count" resultType="_int">
+    select count(*) from department
+    <where>
+      <if test="departmentId != null and departmentId != ''">
+        and department_id like #{departmentId}
+      </if>
+      <if test="departmentName != null and departmentName != ''">
+        and department_name like "%"#{departmentName}"%"
+      </if>
+    </where>
+  </select>
+
+  <select id="selectByPage"  resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/> from department
+    <where>
+      <if test="departmentId != null and departmentId != ''">
+        and department_id like #{departmentId}
+      </if>
+      <if test="departmentName != null and departmentName != ''">
+        and department_name like "%"#{departmentName}"%"
+      </if>
+    </where>
+    limit #{limit} offset #{offset};
+  </select>
+
 </mapper>

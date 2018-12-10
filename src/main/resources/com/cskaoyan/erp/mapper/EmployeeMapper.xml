@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cskaoyan.erp.mapper.EmployeeMapper">
-  <resultMap id="BaseResultMap" type="com.cskaoyan.erp.bean.Employee">
+
+  <resultMap id="BaseResultMap"  type="com.cskaoyan.erp.bean.Employee">
     <id column="emp_id" jdbcType="VARCHAR" property="empId" />
     <result column="emp_name" jdbcType="VARCHAR" property="empName" />
     <result column="sex" jdbcType="CHAR" property="sex" />
@@ -14,10 +15,16 @@
     <result column="major" jdbcType="VARCHAR" property="major" />
     <result column="graduate_school" jdbcType="VARCHAR" property="graduateSchool" />
     <result column="education_form" jdbcType="VARCHAR" property="educationForm" />
-    <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
+
+    <association property="department" javaType="com.cskaoyan.erp.bean.Department">
+      <id column="department_id" jdbcType="VARCHAR" property="departmentId" />
+      <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+      <result column="note" jdbcType="VARCHAR" property="note" />
+    </association>
+
   </resultMap>
   <sql id="Base_Column_List">
-    emp_id, emp_name, sex, id_code, birthday, join_date, status, education, degree, major, 
+    emp_id, emp_name, sex, id_code, birthday, join_date, status, education, degree, major,
     graduate_school, education_form, department_id
   </sql>
   <insert id="insertSelective" parameterType="com.cskaoyan.erp.bean.Employee">
@@ -147,4 +154,43 @@
     </set>
     where emp_id = #{empId,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectAllEmployee" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/> from employee;
+  </select>
+
+  <select id="count" resultType="_int">
+    select count(*) from employee
+    <where>
+      <if test="employeeId != null and employeeId != ''">
+        and employee_id like #{empId}
+      </if>
+      <if test="employeeName != null and employeeName != ''">
+        and employee_name like "%"#{employeeName}"%"
+      </if>
+      <if test="employeeType != null and employeeType != ''">
+        and employee_type like "%"#{employeeType}"%"
+      </if>
+    </where>
+  </select>
+
+  <select id="selectByPage"  resultMap="BaseResultMap">
+
+    select
+    e.emp_id, e.emp_name, e.sex, e.id_code, e.birthday, e.join_date, e.status, e.education,e.degree, e.major,e.graduate_school, e.education_form, e.department_id,
+    d.department_id, d.department_name, d.note
+    from employee e left join department d on e.department_id = d.department_id
+    <where>
+      <if test="employeeId != null and employeeId != ''">
+        and e.employee_id like #{empId}
+      </if>
+      <if test="employeeName != null and employeeName != ''">
+        and e.employee_name like "%"#{empName}"%"
+      </if>
+      <if test="department != null">
+        and d.department_name like "%"#{department.departmentName}"%"
+      </if>
+    </where>
+    limit #{limit} offset #{offset};
+  </select>
 </mapper>
