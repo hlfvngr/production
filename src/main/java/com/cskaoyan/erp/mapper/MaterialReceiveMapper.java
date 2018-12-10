@@ -1,49 +1,25 @@
 package com.cskaoyan.erp.mapper;
 
+import com.cskaoyan.erp.bean.Material;
 import com.cskaoyan.erp.bean.MaterialReceive;
 import org.apache.ibatis.annotations.*;
 
-public interface MaterialReceiveMapper {
-    @Delete({
-        "delete from material_receive",
-        "where receive_id = #{receiveId,jdbcType=VARCHAR}"
-    })
-    int deleteByPrimaryKey(String receiveId);
+import java.util.List;
+import java.util.Map;
 
-    @Insert({
-        "insert into material_receive (receive_id, material_id, ",
-        "amount, receive_date, ",
-        "sender, receiver, ",
-        "note)",
-        "values (#{receiveId,jdbcType=VARCHAR}, #{materialId,jdbcType=VARCHAR}, ",
-        "#{amount,jdbcType=INTEGER}, #{receiveDate,jdbcType=TIMESTAMP}, ",
-        "#{sender,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, ",
-        "#{note,jdbcType=VARCHAR})"
-    })
+public interface MaterialReceiveMapper {
+
+    int deleteByReceiveId(String receiveId);
+
     int insert(MaterialReceive record);
 
-    int insertSelective(MaterialReceive record);
+    int updateByReceiveId(MaterialReceive record);
 
-    @Select({
-        "select",
-        "receive_id, material_id, amount, receive_date, sender, receiver, note",
-        "from material_receive",
-        "where receive_id = #{receiveId,jdbcType=VARCHAR}"
-    })
-    @ResultMap("com.cskaoyan.erp.mapper.MaterialReceiveMapper.BaseResultMap")
-    MaterialReceive selectByPrimaryKey(String receiveId);
+    MaterialReceive selectByReceiveId(String receiveId);
 
-    int updateByPrimaryKeySelective(MaterialReceive record);
+    List<MaterialReceive> selectMaterialReceives(@Param("params") Map<String, Object> params);
 
-    @Update({
-        "update material_receive",
-        "set material_id = #{materialId,jdbcType=VARCHAR},",
-          "amount = #{amount,jdbcType=INTEGER},",
-          "receive_date = #{receiveDate,jdbcType=TIMESTAMP},",
-          "sender = #{sender,jdbcType=VARCHAR},",
-          "receiver = #{receiver,jdbcType=VARCHAR},",
-          "note = #{note,jdbcType=VARCHAR}",
-        "where receive_id = #{receiveId,jdbcType=VARCHAR}"
-    })
-    int updateByPrimaryKey(MaterialReceive record);
+
+    Integer count(@Param("params") Map<String, Object> params);
+
 }

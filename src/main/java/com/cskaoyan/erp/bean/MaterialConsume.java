@@ -1,13 +1,14 @@
 package com.cskaoyan.erp.bean;
 
+import org.apache.ibatis.type.Alias;
+
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class MaterialConsume {
+
+    @NotNull(message = "没有填写物料消耗编号")
     private String consumeId;
-
-    private String workId;
-
-    private String materialId;
 
     private Integer consumeAmount;
 
@@ -19,28 +20,21 @@ public class MaterialConsume {
 
     private String note;
 
+    private String workId;
+
+    private String materialId;
+
+    //有更加好的解决方法？怎么解决？
+    private Work work;
+
+    private Material material;
+
     public String getConsumeId() {
         return consumeId;
     }
 
     public void setConsumeId(String consumeId) {
         this.consumeId = consumeId == null ? null : consumeId.trim();
-    }
-
-    public String getWorkId() {
-        return workId;
-    }
-
-    public void setWorkId(String workId) {
-        this.workId = workId == null ? null : workId.trim();
-    }
-
-    public String getMaterialId() {
-        return materialId;
-    }
-
-    public void setMaterialId(String materialId) {
-        this.materialId = materialId == null ? null : materialId.trim();
     }
 
     public Integer getConsumeAmount() {
@@ -81,5 +75,37 @@ public class MaterialConsume {
 
     public void setNote(String note) {
         this.note = note == null ? null : note.trim();
+    }
+
+    public String getWorkId() {
+        return workId;
+    }
+
+    public void setWorkId(String workId) {
+        this.workId = workId;
+    }
+
+    public String getMaterialId() {
+        return materialId;
+    }
+
+    public void setMaterialId(String materialId) {
+        this.materialId = materialId;
+    }
+
+    public Work getWork() {
+        return work;
+    }
+
+    public void setWork(Work work) {
+        this.work = work;
+    }
+
+    public Material getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(Material material) {
+        this.material = material;
     }
 }

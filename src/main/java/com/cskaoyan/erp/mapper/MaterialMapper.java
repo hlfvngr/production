@@ -3,43 +3,21 @@ package com.cskaoyan.erp.mapper;
 import com.cskaoyan.erp.bean.Material;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+import java.util.Map;
+
 public interface MaterialMapper {
-    @Delete({
-        "delete from material",
-        "where material_id = #{materialId,jdbcType=VARCHAR}"
-    })
-    int deleteByPrimaryKey(String materialId);
 
-    @Insert({
-        "insert into material (material_id, material_type, ",
-        "status, remaining, ",
-        "note)",
-        "values (#{materialId,jdbcType=VARCHAR}, #{materialType,jdbcType=VARCHAR}, ",
-        "#{status,jdbcType=VARCHAR}, #{remaining,jdbcType=INTEGER}, ",
-        "#{note,jdbcType=VARCHAR})"
-    })
-    int insert(Material record);
+    int deleteByMaterialId(String materialId);
 
-    int insertSelective(Material record);
+    int insert(Material material);
 
-    @Select({
-        "select",
-        "material_id, material_type, status, remaining, note",
-        "from material",
-        "where material_id = #{materialId,jdbcType=VARCHAR}"
-    })
-    @ResultMap("com.cskaoyan.erp.mapper.MaterialMapper.BaseResultMap")
-    Material selectByPrimaryKey(String materialId);
+    Material selectByMaterialId(String materialId);
 
-    int updateByPrimaryKeySelective(Material record);
+    List<Material> selectMaterials(@Param("params") Map<String, Object> params);
 
-    @Update({
-        "update material",
-        "set material_type = #{materialType,jdbcType=VARCHAR},",
-          "status = #{status,jdbcType=VARCHAR},",
-          "remaining = #{remaining,jdbcType=INTEGER},",
-          "note = #{note,jdbcType=VARCHAR}",
-        "where material_id = #{materialId,jdbcType=VARCHAR}"
-    })
-    int updateByPrimaryKey(Material record);
+    Integer count(@Param("params") Map<String, Object> params);
+
+    int updateByMaterialId(Material material);
+
 }

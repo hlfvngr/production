@@ -3,53 +3,20 @@ package com.cskaoyan.erp.mapper;
 import com.cskaoyan.erp.bean.Customer;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+import java.util.Map;
+
 public interface CustomerMapper {
-    @Delete({
-        "delete from custom",
-        "where custom_id = #{customId,jdbcType=VARCHAR}"
-    })
-    int deleteByPrimaryKey(String customId);
 
-    @Insert({
-        "insert into custom (custom_id, custom_name, ",
-        "full_name, address, ",
-        "fax, email, owner_name, ",
-        "owner_tel, status, ",
-        "note)",
-        "values (#{customId,jdbcType=VARCHAR}, #{customName,jdbcType=VARCHAR}, ",
-        "#{fullName,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, ",
-        "#{fax,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{ownerName,jdbcType=VARCHAR}, ",
-        "#{ownerTel,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, ",
-        "#{note,jdbcType=VARCHAR})"
-    })
-    int insert(Customer record);
+    int deleteByCustomId(String customId);
 
-    int insertSelective(Customer record);
+    int insert(Customer customer);
 
-    @Select({
-        "select",
-        "custom_id, custom_name, full_name, address, fax, email, owner_name, owner_tel, ",
-        "status, note",
-        "from custom",
-        "where custom_id = #{customId,jdbcType=VARCHAR}"
-    })
-    @ResultMap("com.cskaoyan.erp.mapper.CustomerMapper.BaseResultMap")
-    Customer selectByPrimaryKey(String customId);
+    Customer selectByCustomId(String customId);
 
-    int updateByPrimaryKeySelective(Customer record);
+    int updateByCustomId(Customer customer);
 
-    @Update({
-        "update custom",
-        "set custom_name = #{customName,jdbcType=VARCHAR},",
-          "full_name = #{fullName,jdbcType=VARCHAR},",
-          "address = #{address,jdbcType=VARCHAR},",
-          "fax = #{fax,jdbcType=VARCHAR},",
-          "email = #{email,jdbcType=VARCHAR},",
-          "owner_name = #{ownerName,jdbcType=VARCHAR},",
-          "owner_tel = #{ownerTel,jdbcType=VARCHAR},",
-          "status = #{status,jdbcType=INTEGER},",
-          "note = #{note,jdbcType=VARCHAR}",
-        "where custom_id = #{customId,jdbcType=VARCHAR}"
-    })
-    int updateByPrimaryKey(Customer record);
+    List<Customer> selectCustomers(@Param("params") Map<String, Object> params);
+
+    Integer count(@Param("params") Map<String, Object> params);
 }

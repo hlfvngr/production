@@ -1,6 +1,7 @@
 package com.cskaoyan.erp.bean;
 
 public class Customer {
+
     private String customId;
 
     private String customName;

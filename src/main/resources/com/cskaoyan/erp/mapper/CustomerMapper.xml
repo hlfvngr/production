@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cskaoyan.erp.mapper.CustomerMapper">
-  <resultMap id="BaseResultMap" type="com.cskaoyan.erp.bean.Customer">
+  <resultMap id="customResultMap" type="com.cskaoyan.erp.bean.Customer">
     <id column="custom_id" jdbcType="VARCHAR" property="customId" />
     <result column="custom_name" jdbcType="VARCHAR" property="customName" />
     <result column="full_name" jdbcType="VARCHAR" property="fullName" />
@@ -16,8 +16,10 @@
   <sql id="Base_Column_List">
     custom_id, custom_name, full_name, address, fax, email, owner_name, owner_tel, status, 
     note
-  </sql>
-  <insert id="insertSelective" parameterType="com.cskaoyan.erp.bean.Customer">
+   </sql>
+
+  <!--1、增-->
+  <insert id="insert" parameterType="com.cskaoyan.erp.bean.Customer">
     insert into custom
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="customId != null">
@@ -84,7 +86,9 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cskaoyan.erp.bean.Customer">
+
+  <!--2、改-->
+  <update id="updateByCustomId" parameterType="com.cskaoyan.erp.bean.Customer">
     update custom
     <set>
       <if test="customName != null">
@@ -117,4 +121,43 @@
     </set>
     where custom_id = #{customId,jdbcType=VARCHAR}
   </update>
+
+  <!--3、删除-->
+  <delete id="deleteByCustomId">
+        delete from custom where custom_id = #{customId,jdbcType=VARCHAR}
+    </delete>
+
+  <!--4、查-->
+  <select id="count" resultType="_int">
+    select count(*) from custom
+    <where>
+      <if test="params.customer!=null and params.customer.customId != null and params.customer.customId != ''">
+        and custom_id like "%"#{params.customer.customId}"%"
+      </if>
+      <if test="params.customer!=null and params.customer.customName != null and params.customer.customName != ''">
+        and custom_name like "%"#{params.customer.customName}"%"
+      </if>
+    </where>
+  </select>
+
+  <select id="selectByCustomId" resultMap="customResultMap">
+    select * from custom where custom_id = #{customId,jdbcType=VARCHAR}
+  </select>
+
+  <!--包括多条件查询-->
+  <select id="selectCustomers" resultMap="customResultMap">
+    select * from custom
+    <where>
+      <if test="params.customer!=null and params.customer.customId != null and params.customer.customId != ''">
+        and custom_id like "%"#{params.customer.customId}"%"
+      </if>
+      <if test="params.customer!=null and params.customer.customName != null and params.customer.customName != ''">
+        and custom_name like "%"#{params.customer.customName}"%"
+      </if>
+    </where>
+    <if test="params.rows!=null and params.limitParam!=null">
+      limit #{params.rows}
+      offset #{params.limitParam}
+    </if>
+  </select>
 </mapper>

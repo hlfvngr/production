@@ -1,51 +1,25 @@
 package com.cskaoyan.erp.mapper;
 
 import com.cskaoyan.erp.bean.MaterialConsume;
+import com.cskaoyan.erp.utils.PageModel;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+import java.util.Map;
+
 public interface MaterialConsumeMapper {
-    @Delete({
-        "delete from material_consume",
-        "where consume_id = #{consumeId,jdbcType=VARCHAR}"
-    })
-    int deleteByPrimaryKey(String consumeId);
 
-    @Insert({
-        "insert into material_consume (consume_id, work_id, ",
-        "material_id, consume_amount, ",
-        "consume_date, sender, ",
-        "receiver, note)",
-        "values (#{consumeId,jdbcType=VARCHAR}, #{workId,jdbcType=VARCHAR}, ",
-        "#{materialId,jdbcType=VARCHAR}, #{consumeAmount,jdbcType=INTEGER}, ",
-        "#{consumeDate,jdbcType=TIMESTAMP}, #{sender,jdbcType=VARCHAR}, ",
-        "#{receiver,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR})"
-    })
-    int insert(MaterialConsume record);
+    int deleteByConsumeId(String consumeId);
 
-    int insertSelective(MaterialConsume record);
+    int insert(MaterialConsume materialConsume);
 
-    @Select({
-        "select",
-        "consume_id, work_id, material_id, consume_amount, consume_date, sender, receiver, ",
-        "note",
-        "from material_consume",
-        "where consume_id = #{consumeId,jdbcType=VARCHAR}"
-    })
-    @ResultMap("com.cskaoyan.erp.mapper.MaterialConsumeMapper.BaseResultMap")
-    MaterialConsume selectByPrimaryKey(String consumeId);
+    //改
+    int updateByConsumeId(MaterialConsume materialConsume);
 
-    int updateByPrimaryKeySelective(MaterialConsume record);
+    //查
+    MaterialConsume selectByConsumeId(String consumeId);
 
-    @Update({
-        "update material_consume",
-        "set work_id = #{workId,jdbcType=VARCHAR},",
-          "material_id = #{materialId,jdbcType=VARCHAR},",
-          "consume_amount = #{consumeAmount,jdbcType=INTEGER},",
-          "consume_date = #{consumeDate,jdbcType=TIMESTAMP},",
-          "sender = #{sender,jdbcType=VARCHAR},",
-          "receiver = #{receiver,jdbcType=VARCHAR},",
-          "note = #{note,jdbcType=VARCHAR}",
-        "where consume_id = #{consumeId,jdbcType=VARCHAR}"
-    })
-    int updateByPrimaryKey(MaterialConsume record);
+    List<MaterialConsume> selectMaterialConsumes(@Param("params") Map<String, Object> params);
+
+    Integer count(@Param("params") Map<String, Object> params);
 }
