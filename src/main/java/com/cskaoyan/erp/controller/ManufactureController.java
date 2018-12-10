@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/manufacture")
@@ -23,10 +25,6 @@ public class ManufactureController {
 
     @Autowired
     ManufactureService manufactureService;
-    @Autowired
-    OrderService orderService;
-   /* @Autowired
-    TechnologyService technologyService;*/
 
     //查找生产计划
     @RequestMapping("/find")
@@ -36,40 +34,64 @@ public class ManufactureController {
 
     @RequestMapping("/list")
     @ResponseBody
-    public List<Manufacture> list(PageModel pageModel){
+    public Map<String,Object> list(PageModel pageModel){
+        Map<String,Object> result = new HashMap<>();
+
         Manufacture manufacture = new Manufacture();
         List<Manufacture> manufactures = manufactureService.findManufacture(manufacture,pageModel);
-        return manufactures;
+
+        result.put("rows",manufactures);
+        result.put("total",manufactures.size());
+        return result;
     }
 
     @RequestMapping("/search_manufacture_by_manufactureSn")
     @ResponseBody
-    public List<Manufacture> search_manufacture_by_manufactureSn(String searchValue,PageModel pageModel){
+    public Map<String,Object> search_manufacture_by_manufactureSn(String searchValue,PageModel pageModel){
+        Map<String,Object> result = new HashMap<>();
+
         Manufacture manufacture = new Manufacture();
         manufacture.setManufactureSn(searchValue);
         List<Manufacture> manufactures = manufactureService.findManufacture(manufacture, pageModel);
-        return manufactures;
+
+        result.put("rows",manufactures);
+        result.put("total",manufactures.size());
+        return result;
     }
 
     @RequestMapping("/search_manufacture_by_manufactureOrderId")
     @ResponseBody
-    public List<Manufacture> search_manufacture_by_manufactureOrderId(String searchValue,PageModel pageModel){
-        Order order = orderService.findOrderById(searchValue);
+    public Map<String,Object> search_manufacture_by_manufactureOrderId(String searchValue,PageModel pageModel){
+        Map<String,Object> result = new HashMap<>();
+
+        Order order = new Order();
+        order.setOrderId(searchValue);
+
         Manufacture manufacture = new Manufacture();
         manufacture.setOrder(order);
         List<Manufacture> manufactures = manufactureService.findManufacture(manufacture, pageModel);
-        return manufactures;
+
+        result.put("rows",manufactures);
+        result.put("total",manufactures.size());
+        return result;
     }
 
-   /* @RequestMapping("/search_manufacture_by_manufactureTechnologyName")
+    @RequestMapping("/search_manufacture_by_manufactureTechnologyName")
     @ResponseBody
-    public List<Manufacture> search_manufacture_by_manufactureTechnologyName(String searchValue,PageModel pageModel){
-        Technology technology = technologyService.findTechnologyByName(searchValue);
+    public Map<String,Object> search_manufacture_by_manufactureTechnologyName(String searchValue,PageModel pageModel){
+        Map<String,Object> result = new HashMap<>();
+
+        Technology technology = new Technology();
+        technology.setTechnologyName(searchValue);
+
         Manufacture manufacture = new Manufacture();
         manufacture.setTechnology(technology);
         List<Manufacture> manufactures = manufactureService.findManufacture(manufacture, pageModel);
-        return manufactures;
-    }*/
+
+        result.put("rows",manufactures);
+        result.put("total",manufactures.size());
+        return result;
+    }
 
     //增加生产计划
     @RequestMapping("/add_judge")
@@ -82,17 +104,24 @@ public class ManufactureController {
     }
 
     @RequestMapping("/insert")
-    public String insert(@RequestBody @Valid Manufacture manufacture, BindingResult bindingResult){
+    @ResponseBody
+    public Map<String,Object> insert(@RequestBody @Valid Manufacture manufacture, BindingResult bindingResult){
+        Map<String,Object> result = new HashMap<>();
         if(bindingResult.hasErrors()){
-            return "manufacture_add";
-        }else {
-            boolean b = manufactureService.insertManufacture(manufacture);
-            if(b){
-                return "manufacture_list";
-            }else {
-                return "manufacture_add";
-            }
+            return null;
         }
+        boolean b = manufactureService.insertManufacture(manufacture);
+        if(b){
+            result.put("status",200);
+            result.put("msg","OK");
+            result.put("data",null);
+        }else {
+            result.put("status",100);
+            result.put("msg","fail");
+            result.put("data",null);
+        }
+        return result;
+
     }
 
     //修改生产计划
@@ -106,17 +135,24 @@ public class ManufactureController {
     }
 
     @RequestMapping("/update_all")
-    public String update_all(@RequestBody @Valid Manufacture manufacture,BindingResult bindingResult){
+    @ResponseBody
+    public Map<String,Object> update_all(@RequestBody @Valid Manufacture manufacture,BindingResult bindingResult){
+        Map<String,Object> result = new HashMap<>();
         if(bindingResult.hasErrors()){
-            return "manufacture_edit";
-        }else {
-            boolean b = manufactureService.updateManufacture(manufacture);
-            if(b){
-                return "manufacture_list";
-            }else {
-                return "manufacture_edit";
-            }
+            return null;
         }
+        boolean b = manufactureService.updateManufacture(manufacture);
+        if(b){
+            result.put("status",200);
+            result.put("msg","OK");
+            result.put("data",null);
+        }else {
+            result.put("status",100);
+            result.put("msg","fail");
+            result.put("data",null);
+        }
+        return result;
+
     }
 
     //删除生产计划
@@ -125,13 +161,21 @@ public class ManufactureController {
     public void delete_judge(){}
 
     @RequestMapping("/delete_batch")
-    public String delete_batch(@RequestBody @RequestParam("ids") String ids_str){
+    @ResponseBody
+    public Map<String,Object> delete_batch(@RequestBody @RequestParam("ids") String ids_str){
+        Map<String,Object> result = new HashMap<>();
+
         String[] ids = ids_str.split(",");
         boolean b = manufactureService.deleteManufacture(ids);
         if(b){
-            return "manufacture_list";
+            result.put("status",200);
+            result.put("msg","OK");
+            result.put("data",null);
         }else {
-            return "manufacture_list";
+            result.put("status",100);
+            result.put("msg","fail");
+            result.put("data",null);
         }
+        return result;
     }
 }

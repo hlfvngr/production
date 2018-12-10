@@ -3,9 +3,7 @@ package com.cskaoyan.erp.controller;
 import com.cskaoyan.erp.bean.Manufacture;
 import com.cskaoyan.erp.bean.Task;
 import com.cskaoyan.erp.bean.Work;
-import com.cskaoyan.erp.service.ManufactureService;
 import com.cskaoyan.erp.service.TaskService;
-import com.cskaoyan.erp.service.WorkService;
 import com.cskaoyan.erp.utils.PageModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/task")
@@ -24,10 +24,6 @@ public class TaskController {
 
     @Autowired
     TaskService taskService;
-    @Autowired
-    WorkService workService;
-    @Autowired
-    ManufactureService manufactureService;
 
     //查找生产派工
     @RequestMapping("/find")
@@ -36,32 +32,63 @@ public class TaskController {
     }
 
     @RequestMapping("/list")
-    public List<Task> list(PageModel pageModel){
+    @ResponseBody
+    public Map<String,Object> list(PageModel pageModel){
+        Map<String,Object> result = new HashMap<>();
         Task task = new Task();
-        return taskService.findAllTask(task,pageModel);
+        List<Task> tasks = taskService.findAllTask(task, pageModel);
+
+        result.put("rows",tasks);
+        result.put("total",tasks.size());
+        return result;
     }
 
     @RequestMapping("/search_task_by_taskId")
-    public List<Task> search_task_by_taskId(String searchValue, PageModel pageModel){
+    @ResponseBody
+    public Map<String,Object> search_task_by_taskId(String searchValue, PageModel pageModel){
+        Map<String,Object> result = new HashMap<>();
+
         Task task = new Task();
         task.setTaskId(searchValue);
-        return taskService.findAllTask(task,pageModel);
+        List<Task> tasks = taskService.findAllTask(task, pageModel);
+
+        result.put("rows",tasks);
+        result.put("total",tasks.size());
+        return result;
     }
 
     @RequestMapping("/search_task_by_taskWorkId")
-    public List<Task> search_task_by_taskWorkId(String searchValue, PageModel pageModel){
-        Work work = workService.findWorkById(searchValue);
+    @ResponseBody
+    public Map<String,Object> search_task_by_taskWorkId(String searchValue, PageModel pageModel){
+        Map<String,Object> result = new HashMap<>();
+
+        Work work = new Work();
+        work.setWorkId(searchValue);
+
         Task task = new Task();
         task.setWork(work);
-        return taskService.findAllTask(task,pageModel);
+        List<Task> tasks = taskService.findAllTask(task, pageModel);
+
+        result.put("rows",tasks);
+        result.put("total",tasks.size());
+        return result;
     }
 
     @RequestMapping("/search_task_by_taskManufactureSn")
-    public List<Task> search_task_by_taskManufactureSn(String searchValue, PageModel pageModel){
-        Manufacture manufacture = manufactureService.findManufactureById(searchValue);
+    @ResponseBody
+    public Map<String,Object> search_task_by_taskManufactureSn(String searchValue, PageModel pageModel){
+        Map<String,Object> result = new HashMap<>();
+
+        Manufacture manufacture = new Manufacture();
+        manufacture.setManufactureSn(searchValue);
+
         Task task = new Task();
         task.setManufacture(manufacture);
-        return taskService.findAllTask(task,pageModel);
+        List<Task> tasks = taskService.findAllTask(task, pageModel);
+
+        result.put("rows",tasks);
+        result.put("total",tasks.size());
+        return result;
     }
 
     //增加生产派工
@@ -74,18 +101,24 @@ public class TaskController {
         return "task_add";
     }
 
-    @RequestMapping("insert")
-    public String insert(@RequestBody @Valid Task task, BindingResult bindingResult){
+    @RequestMapping("/insert")
+    @ResponseBody
+    public Map<String,Object> insert(@RequestBody @Valid Task task, BindingResult bindingResult){
+        Map<String,Object> result = new HashMap<>();
         if(bindingResult.hasErrors()){
-            return "task_add";
-        }else {
-            boolean b = taskService.insertTask(task);
-            if(b){
-                return "task_list";
-            }else {
-                return "task_add";
-            }
+            return null;
         }
+        boolean b = taskService.insertTask(task);
+        if(b){
+            result.put("status",200);
+            result.put("msg","OK");
+            result.put("data",null);
+        }else {
+            result.put("status",100);
+            result.put("msg","fail");
+            result.put("data",null);
+        }
+        return result;
     }
 
     //修改生产派工
@@ -99,34 +132,49 @@ public class TaskController {
     }
 
     @RequestMapping("/update_all")
-    public String update_all(@RequestBody @Valid Task task, BindingResult bindingResult){
+    @ResponseBody
+    public Map<String,Object> update_all(@RequestBody @Valid Task task, BindingResult bindingResult){
+        Map<String,Object> result = new HashMap<>();
+
         if(bindingResult.hasErrors()){
-            return "task_edit";
-        }else {
+            return null;
+        }
             boolean b = taskService.updateTask(task);
             if(b){
-                return "task_list";
+                result.put("status",200);
+                result.put("msg","OK");
+                result.put("data",null);
             }else {
-                return "task_edit";
+                result.put("status",100);
+                result.put("msg","fail");
+                result.put("data",null);
             }
-        }
+            return result;
+
     }
 
     //删除生产派工
-
     @RequestMapping("/delete_judge")
     @ResponseBody
     public void delete_judge(){}
 
 
     @RequestMapping("/delete_batch")
-    public String delete_batch(@RequestBody @RequestParam("ids") String ids_str){
+    @ResponseBody
+    public Map<String,Object> delete_batch(@RequestBody @RequestParam("ids") String ids_str){
+        Map<String,Object> result = new HashMap<>();
+
         String[] ids = ids_str.split(",");
         boolean b = taskService.deleteTask(ids);
         if(b){
-            return "task_list";
+            result.put("status",200);
+            result.put("msg","OK");
+            result.put("data",null);
         }else {
-            return "task_list";
+            result.put("status",100);
+            result.put("msg","fail");
+            result.put("data",null);
         }
+        return result;
     }
 }

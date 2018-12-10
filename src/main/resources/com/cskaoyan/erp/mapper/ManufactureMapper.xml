@@ -121,13 +121,13 @@
      select count(*) from manufacture
      <where>
         <if test="manufactureSn != null and manufactureSn != '' ">
-          and manufacture_sn = #{manufactureSn}
+          and m.manufacture_sn = #{manufactureSn}
         </if>
        <if test="order != null">
-         and order_id = #{order.orderId}
+         and m.order_id = #{order.orderId}
        </if>
        <if test="technology != null">
-        and technology_id = #{technology.technologyId}
+        and t.technology_name = "%"#{technology.technologyName}"%"
        </if>
      </where>
   </select>
@@ -152,14 +152,14 @@
          and m.order_id = #{order.orderId}
        </if>
        <if test="technology != null">
-         and m.technology_id = #{technology.technologyId}
+         and t.technology_name = "%"#{technology.technologyName}"%"
        </if>
      </where>
          limit #{limit} offset #{offset};
   </select>
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap">
-    select <include refid="join"/> where manufacture_sn = #{manufactureSn};
+    select <include refid="join"/> where m.manufacture_sn = #{manufactureSn};
   </select>
 
 </mapper>
