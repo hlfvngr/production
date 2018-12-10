@@ -130,12 +130,9 @@ public class ProductController {
 
     @RequestMapping("/get/{productId}")
     @ResponseBody
-    public Map<String,Object> get(@PathVariable String productId){
-        Map<String,Object> result = new HashMap<String, Object>();
+    public Product get(@PathVariable String productId){
         Product product = productService.findProductById(productId);
-        result.put("rows",product);
-        result.put("total",1);
-        return result;
+        return product;
     }
 
     @RequestMapping("/search_product_by_productId")
