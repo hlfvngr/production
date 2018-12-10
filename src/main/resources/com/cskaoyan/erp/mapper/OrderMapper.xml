@@ -181,10 +181,10 @@
             and order_id like #{orderId,jdbcType=VARCHAR}
           </if>
           <if test="orderCustom != null">
-            and custom_id like #{orderCustom.customId,jdbcType=VARCHAR}
+            and custom_id like "%"#{orderCustom.customId,jdbcType=VARCHAR}"%"
           </if>
           <if test="orderProduct != null">
-            and product_id like #{orderProduct.productId,jdbcType=VARCHAR}
+            and product_id like "%"#{orderProduct.productId,jdbcType=VARCHAR}"%"
           </if>
     </where>
   </select>
@@ -207,10 +207,10 @@
         and o.order_id like #{orderId,jdbcType=VARCHAR}
       </if>
       <if test="orderCustom != null">
-        and o.custom_id like #{orderCustom.customId,jdbcType=VARCHAR}
+        and o.custom_id like "%"#{orderCustom.customId,jdbcType=VARCHAR}"%"
       </if>
       <if test="orderProduct != null">
-        and o.product_id like #{orderProduct.productId,jdbcType=VARCHAR}
+        and o.product_id like "%"#{orderProduct.productId,jdbcType=VARCHAR}"%"
       </if>
     </where>
       limit #{limit} offset #{offset};

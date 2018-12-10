@@ -24,10 +24,6 @@ public class OrderController {
 
     @Autowired
     OrderService orderService;
-    @Autowired
-    CustomService customService;
-    @Autowired
-    ProductService productService;
 
     //增加订单
     @RequestMapping("/add_judge")
@@ -107,12 +103,14 @@ public class OrderController {
         return result;
     }
 
-   /* @RequestMapping("/search_product_by_orderCustom")
+    @RequestMapping("/search_product_by_orderCustom")
     @ResponseBody
     public   Map<String,Object> search_product_by_orderCustom(String searchValue, PageModel pageModel) {
         Map<String, Object> result = new HashMap<String, Object>();
 
-        Customer customer = customService.findCustomByName(searchValue);
+        Customer customer = new Customer();
+        customer.setCustomName(searchValue);
+
         Order order = new Order();
         order.setOrderCustom(customer);
         List<Order> orders = orderService.findAllOrder(order, pageModel);
@@ -120,14 +118,16 @@ public class OrderController {
         result.put("rows", orders);
         result.put("total", orders.size());
         return result;
-    }*/
+    }
 
     @RequestMapping("/search_product_by_orderProduct")
-    @ResponseBody
+    @ResponseBody//联合查询更好
     public  Map<String,Object> search_product_by_orderProduct(String searchValue, PageModel pageModel){
         Map<String,Object> result = new HashMap<String, Object>();
 
-        Product product = productService.findProductByName(searchValue);
+        Product product =new Product();
+        product.setProductName(searchValue);
+
         Order order = new Order();
         order.setOrderProduct(product);
         List<Order> orders = orderService.findAllOrder(order, pageModel);
