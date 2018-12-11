@@ -23,4 +23,6 @@ public interface ManufactureMapper {
 
     List<Manufacture> selectByPage(Map<String, Object> map);
 
+    List<Manufacture> selectAllManufacture();
+
 }

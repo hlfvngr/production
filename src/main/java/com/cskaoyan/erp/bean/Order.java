@@ -6,9 +6,9 @@ import java.util.Date;
 public class Order {
     private String orderId;
 
-    private Customer orderCustom;
+    private Customer custom;
 
-    private Product orderProduct;
+    private Product product;
 
     private Date orderDate;
 
@@ -36,20 +36,20 @@ public class Order {
         this.orderId = orderId == null ? null : orderId.trim();
     }
 
-    public Customer getOrderCustom() {
-        return orderCustom;
+    public Customer getCustom() {
+        return custom;
     }
 
-    public void setOrderCustom(Customer orderCustom) {
-        this.orderCustom = orderCustom;
+    public void setCustom(Customer custom) {
+        this.custom = custom;
     }
 
-    public Product getOrderProduct() {
-        return orderProduct;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setOrderProduct(Product orderProduct) {
-        this.orderProduct = orderProduct;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public Date getOrderDate() {

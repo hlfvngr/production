@@ -41,8 +41,14 @@ public class ManufactureController {
         List<Manufacture> manufactures = manufactureService.findManufacture(manufacture,pageModel);
 
         result.put("rows",manufactures);
-        result.put("total",manufactures.size());
+        result.put("total",pageModel.getRecordCount());
         return result;
+    }
+
+    @RequestMapping("/get_data")
+    @ResponseBody
+    public List<Manufacture> get_data(){
+        return manufactureService.findAllManufacture();
     }
 
     @RequestMapping("/search_manufacture_by_manufactureSn")
@@ -55,7 +61,7 @@ public class ManufactureController {
         List<Manufacture> manufactures = manufactureService.findManufacture(manufacture, pageModel);
 
         result.put("rows",manufactures);
-        result.put("total",manufactures.size());
+        result.put("total",pageModel.getRecordCount());
         return result;
     }
 
@@ -72,7 +78,7 @@ public class ManufactureController {
         List<Manufacture> manufactures = manufactureService.findManufacture(manufacture, pageModel);
 
         result.put("rows",manufactures);
-        result.put("total",manufactures.size());
+        result.put("total",pageModel.getRecordCount());
         return result;
     }
 
@@ -89,7 +95,7 @@ public class ManufactureController {
         List<Manufacture> manufactures = manufactureService.findManufacture(manufacture, pageModel);
 
         result.put("rows",manufactures);
-        result.put("total",manufactures.size());
+        result.put("total",pageModel.getRecordCount());
         return result;
     }
 
@@ -105,11 +111,14 @@ public class ManufactureController {
 
     @RequestMapping("/insert")
     @ResponseBody
-    public Map<String,Object> insert(@RequestBody @Valid Manufacture manufacture, BindingResult bindingResult){
+    public Map<String,Object> insert( @Valid Manufacture manufacture,Order cOder,Technology technology, BindingResult bindingResult){
         Map<String,Object> result = new HashMap<>();
         if(bindingResult.hasErrors()){
             return null;
         }
+
+        manufacture.setcOrder(cOder);
+        manufacture.setTechnology(technology);
         boolean b = manufactureService.insertManufacture(manufacture);
         if(b){
             result.put("status",200);
@@ -136,11 +145,14 @@ public class ManufactureController {
 
     @RequestMapping("/update_all")
     @ResponseBody
-    public Map<String,Object> update_all(@RequestBody @Valid Manufacture manufacture,BindingResult bindingResult){
+    public Map<String,Object> update_all( @Valid Manufacture manufacture,Order cOder,Technology technology,BindingResult bindingResult){
         Map<String,Object> result = new HashMap<>();
         if(bindingResult.hasErrors()){
             return null;
         }
+
+        manufacture.setcOrder(cOder);
+        manufacture.setTechnology(technology);
         boolean b = manufactureService.updateManufacture(manufacture);
         if(b){
             result.put("status",200);

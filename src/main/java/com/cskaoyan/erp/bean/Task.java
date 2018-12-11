@@ -3,7 +3,11 @@ package com.cskaoyan.erp.bean;
 public class Task {
     private String taskId;
 
+    private String manufactureSn;
+
     private Manufacture manufacture;
+
+    private String workId;
 
     private Work work;
 
@@ -17,6 +21,22 @@ public class Task {
 
     public void setTaskId(String taskId) {
         this.taskId = taskId == null ? null : taskId.trim();
+    }
+
+    public String getManufactureSn() {
+        return manufactureSn;
+    }
+
+    public void setManufactureSn(String manufactureSn) {
+        this.manufactureSn = manufactureSn;
+    }
+
+    public String getWorkId() {
+        return workId;
+    }
+
+    public void setWorkId(String workId) {
+        this.workId = workId;
     }
 
     public Manufacture getManufacture() {

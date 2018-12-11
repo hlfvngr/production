@@ -39,7 +39,7 @@ public class TaskController {
         List<Task> tasks = taskService.findAllTask(task, pageModel);
 
         result.put("rows",tasks);
-        result.put("total",tasks.size());
+        result.put("total",pageModel.getRecordCount());
         return result;
     }
 
@@ -53,7 +53,7 @@ public class TaskController {
         List<Task> tasks = taskService.findAllTask(task, pageModel);
 
         result.put("rows",tasks);
-        result.put("total",tasks.size());
+        result.put("total",pageModel.getRecordCount());
         return result;
     }
 
@@ -70,7 +70,7 @@ public class TaskController {
         List<Task> tasks = taskService.findAllTask(task, pageModel);
 
         result.put("rows",tasks);
-        result.put("total",tasks.size());
+        result.put("total",pageModel.getRecordCount());
         return result;
     }
 
@@ -87,7 +87,7 @@ public class TaskController {
         List<Task> tasks = taskService.findAllTask(task, pageModel);
 
         result.put("rows",tasks);
-        result.put("total",tasks.size());
+        result.put("total",pageModel.getRecordCount());
         return result;
     }
 
@@ -103,11 +103,13 @@ public class TaskController {
 
     @RequestMapping("/insert")
     @ResponseBody
-    public Map<String,Object> insert(@RequestBody @Valid Task task, BindingResult bindingResult){
+    public Map<String,Object> insert( @Valid Task task,Manufacture manufacture,Work work, BindingResult bindingResult){
         Map<String,Object> result = new HashMap<>();
         if(bindingResult.hasErrors()){
             return null;
         }
+        task.setManufacture(manufacture);
+        task.setWork(work);
         boolean b = taskService.insertTask(task);
         if(b){
             result.put("status",200);
@@ -133,23 +135,25 @@ public class TaskController {
 
     @RequestMapping("/update_all")
     @ResponseBody
-    public Map<String,Object> update_all(@RequestBody @Valid Task task, BindingResult bindingResult){
+    public Map<String,Object> update_all( @Valid Task task,Manufacture manufacture,Work work, BindingResult bindingResult){
         Map<String,Object> result = new HashMap<>();
 
         if(bindingResult.hasErrors()){
             return null;
         }
-            boolean b = taskService.updateTask(task);
-            if(b){
-                result.put("status",200);
-                result.put("msg","OK");
-                result.put("data",null);
-            }else {
-                result.put("status",100);
-                result.put("msg","fail");
-                result.put("data",null);
-            }
-            return result;
+        task.setManufacture(manufacture);
+        task.setWork(work);
+        boolean b = taskService.updateTask(task);
+        if(b){
+            result.put("status",200);
+            result.put("msg","OK");
+            result.put("data",null);
+        }else {
+            result.put("status",100);
+            result.put("msg","fail");
+            result.put("data",null);
+        }
+        return result;
 
     }
 

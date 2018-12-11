@@ -16,4 +16,6 @@ public interface ManufactureService {
     boolean deleteManufacture(String[] ids);
 
     Manufacture findManufactureById(String manufactureId);
+
+    List<Manufacture> findAllManufacture();
 }

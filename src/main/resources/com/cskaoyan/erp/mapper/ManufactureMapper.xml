@@ -20,9 +20,9 @@
       <result column="image" jdbcType="VARCHAR" property="image" />
       <result column="file" jdbcType="VARCHAR" property="file" />
       <result column="status" jdbcType="INTEGER" property="status" />
-      <association column="custom_id" property="orderCustom"
+      <association column="custom_id" property="custom"
                    select="com.cskaoyan.erp.mapper.CustomerMapper.selectByCustomId"/>
-      <association column="product_id"  property="orderProduct"
+      <association column="product_id"  property="product"
                    select="com.cskaoyan.erp.mapper.ProductMapper.selectByPrimaryKey"/>
     </association>
 
@@ -90,10 +90,10 @@
   <update id="updateByPrimaryKey" parameterType="com.cskaoyan.erp.bean.Manufacture">
     update manufacture
     <set>
-      <if test="cOrder != null">
+      <if test="cOrder.orderId != null">
         order_id = #{cOrder.orderId,jdbcType=VARCHAR},
       </if>
-      <if test="technology != null">
+      <if test="technology.technologyId != null">
         technology_id = #{technology.technologyId,jdbcType=VARCHAR},
       </if>
       <if test="launchQuantity != null">
@@ -162,4 +162,7 @@
     select <include refid="join"/> where m.manufacture_sn = #{manufactureSn};
   </select>
 
+  <select id="selectAllManufacture" resultMap="BaseResultMap">
+     select <include refid="join"/>;
+  </select>
 </mapper>

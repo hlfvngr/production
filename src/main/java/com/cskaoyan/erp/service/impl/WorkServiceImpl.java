@@ -24,9 +24,9 @@ public class WorkServiceImpl implements WorkService {
     public List<Work> selectWork(Work work, PageModel pageModel) {
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("workId",work.getWorkId());
-        map.put("workProduct",work.getWorkProduct());
-        map.put("workDevice",work.getWorkDevice());
-        map.put("workProcess",work.getWorkProcess());
+        map.put("product",work.getProduct());
+        map.put("device",work.getDevice());
+        map.put("process",work.getProcess());
         int count = workMapper.count(map);
         if(count == 0){
             return null;

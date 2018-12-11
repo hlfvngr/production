@@ -27,8 +27,8 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> findAllOrder(Order order, PageModel pageModel) {
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("orderId",order.getOrderId());
-        map.put("orderCustom",order.getOrderCustom());
-        map.put("orderProduct",order.getOrderProduct());
+        map.put("custom",order.getCustom());
+        map.put("product",order.getProduct());
         int count = orderMapper.count(map);
         if(count == 0){
             return null;

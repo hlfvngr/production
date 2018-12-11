@@ -117,7 +117,7 @@ public class ProductController {
         Product product = new Product();
         List<Product> products = productService.findAllProduct(product, pageModel);
         result.put("rows",products);
-        result.put("total",products.size());
+        result.put("total",pageModel.getRecordCount());
         return result;
     }
 
@@ -143,7 +143,7 @@ public class ProductController {
         product.setProductId(searchValue);
         List<Product> products = productService.findAllProduct(product, pageModel);
         result.put("rows",products);
-        result.put("total",products.size());
+        result.put("total",pageModel.getRecordCount());
         return result;
     }
 
@@ -155,7 +155,7 @@ public class ProductController {
         product.setProductName(searchValue);
         List<Product> products = productService.findAllProduct(product, pageModel);
         result.put("rows",products);
-        result.put("total",products.size());
+        result.put("total",pageModel.getRecordCount());
         return result;
     }
 
@@ -167,7 +167,7 @@ public class ProductController {
         product.setProductType(searchValue);
         List<Product> products = productService.findAllProduct(product, pageModel);
         result.put("rows",products);
-        result.put("total",products.size());
+        result.put("total",pageModel.getRecordCount());
         return result;
     }
 

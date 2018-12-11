@@ -37,21 +37,31 @@ public class OrderController {
 
     @RequestMapping("/insert")
     @ResponseBody
-    public Map<String,Object> insert(@Valid Order order, MultipartFile multipartFile, BindingResult bindingResult){
+    public Map<String,Object> insert(@Valid Order order, Customer customer,Product product,
+                                     MultipartFile multipartFile, BindingResult bindingResult){
         Map<String,Object> result = new HashMap<String, Object>();
         if(bindingResult.hasErrors()){
             return null;
         }
             //图片的处理
-        boolean ret = orderService.insertOrder(order);
-        if(ret){
-            result.put("status",200);
-            result.put("msg","OK");
+        order.setCustom(customer);
+        order.setProduct(product);
+        Order orderById = orderService.findOrderById(order.getOrderId());
+        if(orderById != null){
+            result.put("status",0);
+            result.put("msg","该订单号已经存在!,请重新插入");
             result.put("data",null);
-         }else {
-            result.put("status",100);
-            result.put("msg","fail");
-            result.put("data",null);
+        }else {
+            boolean ret = orderService.insertOrder(order);
+            if(ret){
+                result.put("status",200);
+                result.put("msg","OK");
+                result.put("data",null);
+            }else {
+                result.put("status",100);
+                result.put("msg","fail");
+                result.put("data",null);
+            }
         }
         return result;
     }
@@ -85,7 +95,7 @@ public class OrderController {
         List<Order> orders = orderService.findAllOrder(order, pageModel);
 
         result.put("rows",orders);
-        result.put("total",orders.size());
+        result.put("total",pageModel.getRecordCount());
         return result;
     }
 
@@ -99,7 +109,7 @@ public class OrderController {
         List<Order> orders = orderService.findAllOrder(order, pageModel);
 
         result.put("rows",orders);
-        result.put("total",orders.size());
+        result.put("total",pageModel.getRecordCount());
         return result;
     }
 
@@ -112,11 +122,11 @@ public class OrderController {
         customer.setCustomName(searchValue);
 
         Order order = new Order();
-        order.setOrderCustom(customer);
+        order.setCustom(customer);
         List<Order> orders = orderService.findAllOrder(order, pageModel);
 
         result.put("rows", orders);
-        result.put("total", orders.size());
+        result.put("total", pageModel.getRecordCount());
         return result;
     }
 
@@ -129,11 +139,11 @@ public class OrderController {
         product.setProductName(searchValue);
 
         Order order = new Order();
-        order.setOrderProduct(product);
+        order.setProduct(product);
         List<Order> orders = orderService.findAllOrder(order, pageModel);
 
         result.put("rows",orders);
-        result.put("total",orders.size());
+        result.put("total",pageModel.getRecordCount());
         return result;
     }
 
@@ -149,12 +159,14 @@ public class OrderController {
 
     @RequestMapping("/update_note")
     @ResponseBody
-    public Map<String,Object> update_note(@RequestBody @Valid Order order, BindingResult bindingResult){
+    public Map<String,Object> update_note(@Valid Order order, Customer customer,Product product, BindingResult bindingResult){
         Map<String,Object> result = new HashMap<String, Object>();
 
         if(bindingResult.hasErrors()){
             return null;
         }
+        order.setCustom(customer);
+        order.setProduct(product);
         boolean ret = orderService.updateOrderNote(order);
         if(ret){
             result.put("status",200);
@@ -171,12 +183,15 @@ public class OrderController {
 
     @RequestMapping("/update_all")
     @ResponseBody
-    public Map<String,Object>  update_all(@RequestBody @Valid Order order, MultipartFile multipartFile, BindingResult bindingResult){
+    public Map<String,Object>  update_all( @Valid Order order,  Customer customer,Product product,
+                                          MultipartFile multipartFile, BindingResult bindingResult){
         Map<String,Object> result = new HashMap<String, Object>();
 
         if(bindingResult.hasErrors()){
             return null;
         }
+        order.setCustom(customer);
+        order.setProduct(product);
         boolean ret = orderService.updateOrder(order);
         if(ret){
             result.put("status",200);

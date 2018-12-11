@@ -13,7 +13,7 @@
     <result column="image" jdbcType="VARCHAR" property="image" />
     <result column="file" jdbcType="VARCHAR" property="file" />
     <result column="status" jdbcType="INTEGER" property="status" />
-    <association  property="orderCustom" javaType="com.cskaoyan.erp.bean.Customer">
+    <association  property="custom" javaType="com.cskaoyan.erp.bean.Customer">
 
       <id column="custom_id" property="customId" />
       <result column="custom_name"  property="customName" />
@@ -27,7 +27,7 @@
       <result column="cNote" property="note" />
     </association>
 
-    <association  property="orderProduct" javaType="com.cskaoyan.erp.bean.Product">
+    <association  property="product" javaType="com.cskaoyan.erp.bean.Product">
       <id column="product_id" property="productId" />
       <result column="product_name" property="productName" />
       <result column="product_type" property="productType" />
@@ -46,8 +46,8 @@
   <insert id="insert">
         insert into c_order (order_id, custom_id, product_id, order_date,request_date, note,
         quantity, unit_price, unit, image, file, status)
-        values (#{orderId}, #{orderCustom.customId},
-        #{orderProduct.productId}, #{orderDate},
+        values (#{orderId}, #{custom.customId},
+        #{product.productId}, #{orderDate},
         #{requestDate}, #{note},
         #{quantity}, #{unitPrice},
         #{unit}, #{image}, #{file},
@@ -60,10 +60,10 @@
       <if test="orderId != null">
         order_id,
       </if>
-      <if test="customId != null">
+      <if test="orderCustom.customId != null">
         custom_id,
       </if>
-      <if test="productId != null">
+      <if test="orderProduct.productId != null">
         product_id,
       </if>
       <if test="orderDate != null">
@@ -98,10 +98,10 @@
       <if test="orderId != null">
         #{orderId,jdbcType=VARCHAR},
       </if>
-      <if test="customId != null">
+      <if test="orderCustom.customId != null">
         #{customId,jdbcType=VARCHAR},
       </if>
-      <if test="productId != null">
+      <if test="orderProduct.productId != null">
         #{productId,jdbcType=VARCHAR},
       </if>
       <if test="orderDate != null">
@@ -137,11 +137,11 @@
   <update id="updateByPrimaryKey" parameterType="com.cskaoyan.erp.bean.Order">
     update c_order
     <set>
-      <if test="orderCustom != null">
-        custom_id = #{orderCustom.customId,jdbcType=VARCHAR},
+      <if test="custom.customId != null">
+        custom_id = #{custom.customId,jdbcType=VARCHAR},
       </if>
-      <if test="orderProduct != null">
-        product_id = #{orderProduct.productId,jdbcType=VARCHAR},
+      <if test="product.productId != null">
+        product_id = #{product.productId,jdbcType=VARCHAR},
       </if>
       <if test="orderDate != null">
         order_date = #{orderDate,jdbcType=TIMESTAMP},
@@ -181,10 +181,10 @@
             and order_id like #{orderId,jdbcType=VARCHAR}
           </if>
           <if test="orderCustom != null">
-            and custom_id like "%"#{orderCustom.customId,jdbcType=VARCHAR}"%"
+            and custom_id like "%"#{custom.customId,jdbcType=VARCHAR}"%"
           </if>
           <if test="orderProduct != null">
-            and product_id like "%"#{orderProduct.productId,jdbcType=VARCHAR}"%"
+            and product_id like "%"#{product.productId,jdbcType=VARCHAR}"%"
           </if>
     </where>
   </select>
@@ -207,10 +207,10 @@
         and o.order_id like #{orderId,jdbcType=VARCHAR}
       </if>
       <if test="orderCustom != null">
-        and o.custom_id like "%"#{orderCustom.customId,jdbcType=VARCHAR}"%"
+        and o.custom_id like "%"#{custom.customId,jdbcType=VARCHAR}"%"
       </if>
       <if test="orderProduct != null">
-        and o.product_id like "%"#{orderProduct.productId,jdbcType=VARCHAR}"%"
+        and o.product_id like "%"#{product.productId,jdbcType=VARCHAR}"%"
       </if>
     </where>
       limit #{limit} offset #{offset};

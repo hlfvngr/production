@@ -7,11 +7,11 @@ public class Work {
 
     private String productId;
 
-    private Product workProduct;
+    private Product product;
 
-    private Process workProcess;
+    private Process process;
 
-    private Device workDevice;
+    private Device device;
 
     private Integer rating;
 
@@ -39,28 +39,28 @@ public class Work {
         this.productId = productId;
     }
 
-    public Product getWorkProduct() {
-        return workProduct;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setWorkProduct(Product workProduct) {
-        this.workProduct = workProduct;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
-    public Process getWorkProcess() {
-        return workProcess;
+    public Process getProcess() {
+        return process;
     }
 
-    public void setWorkProcess(Process workProcess) {
-        this.workProcess = workProcess;
+    public void setProcess(Process process) {
+        this.process = process;
     }
 
-    public Device getWorkDevice() {
-        return workDevice;
+    public Device getDevice() {
+        return device;
     }
 
-    public void setWorkDevice(Device workDevice) {
-        this.workDevice = workDevice;
+    public void setDevice(Device device) {
+        this.device = device;
     }
 
     public Integer getRating() {

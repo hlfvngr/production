@@ -4,10 +4,12 @@
 
   <resultMap id="BaseResultMap" type="com.cskaoyan.erp.bean.Task">
     <id column="task_id" jdbcType="VARCHAR" property="taskId" />
+    <result column="manufacture_sn" property="manufactureSn"/>
+    <result column="work_id" property="workId" />
     <result column="task_quantity" jdbcType="INTEGER" property="taskQuantity" />
     <result column="working_hours" jdbcType="DECIMAL" property="workingHours" />
 
-    <association property="manufacture" javaType="com.cskaoyan.erp.bean.Manufacture">
+    <!--<association property="manufacture" javaType="com.cskaoyan.erp.bean.Manufacture">
       <id column="manufacture_sn" jdbcType="VARCHAR" property="manufactureSn" />
       <result column="launch_quantity" jdbcType="INTEGER" property="launchQuantity" />
       <result column="begin_date" jdbcType="TIMESTAMP" property="beginDate" />
@@ -22,13 +24,13 @@
       <id column="work_id" jdbcType="VARCHAR" property="workId" />
       <result column="process_number" jdbcType="VARCHAR" property="processNumber" />
       <result column="rating" jdbcType="INTEGER" property="rating" />
-      <association column="product_id" property="workProduct"
+      <association column="product_id" property="product"
                    select="com.cskaoyan.erp.mapper.ProductMapper.selectByPrimaryKey"/>
-      <association column="process_id" property="workProcess"
+      <association column="process_id" property="process"
                    select="com.cskaoyan.erp.mapper.ProcessMapper.selectByPrimaryKey"/>
-      <association column="device_id" property="workDevice"
+      <association column="device_id" property="device"
                    select="com.cskaoyan.erp.mapper.DeviceMapper.selectByPrimaryKey"/>
-    </association>
+    </association>-->
 
   </resultMap>
   <sql id="Base_Column_List">
@@ -78,7 +80,7 @@
       <if test="manufacture != null">
         manufacture_sn = #{manufacture.manufactureSn,jdbcType=VARCHAR},
       </if>
-      <if test="work != null">
+      <if test="work.workId != null">
         work_id = #{work.workId,jdbcType=VARCHAR},
       </if>
       <if test="taskQuantity != null">

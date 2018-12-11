@@ -40,7 +40,7 @@ public class WorkController {
         List<Work> works = workService.selectWork(work,pageModel);
 
         result.put("rows",works);
-        result.put("total",works.size());
+        result.put("total",pageModel.getRecordCount());
         return result;
     }
 
@@ -66,7 +66,7 @@ public class WorkController {
         List<Work> works = workService.selectWork(work, pageModel);
 
         result.put("rows",works);
-        result.put("total",works.size());
+        result.put("total",pageModel.getRecordCount());
         return result;
     }
 
@@ -79,11 +79,11 @@ public class WorkController {
         product.setProductName(searchValue);
 
         Work work  = new Work();
-        work.setWorkProduct(product);
+        work.setProduct(product);
         List<Work> works = workService.selectWork(work, pageModel);
 
         result.put("rows",works);
-        result.put("total",works.size());
+        result.put("total",pageModel.getRecordCount());
         return result;
     }
 
@@ -96,11 +96,11 @@ public class WorkController {
         device.setDeviceName(searchValue);
 
         Work work  = new Work();
-        work.setWorkDevice(device);
+        work.setDevice(device);
         List<Work> works = workService.selectWork(work, pageModel);
 
         result.put("rows",works);
-        result.put("total",works.size());
+        result.put("total",pageModel.getRecordCount());
         return result;
     }
 
@@ -113,11 +113,11 @@ public class WorkController {
         process.setProcessId(searchValue);
 
         Work work  = new Work();
-        work.setWorkProcess(process);
+        work.setProcess(process);
         List<Work> works = workService.selectWork(work, pageModel);
 
         result.put("rows",works);
-        result.put("total",works.size());
+        result.put("total",pageModel.getRecordCount());
         return result;
     }
 
@@ -133,11 +133,15 @@ public class WorkController {
 
     @RequestMapping("/insert")
     @ResponseBody
-    public Map<String,Object> insert(@RequestBody @Valid Work work, BindingResult bindingResult){
+    public Map<String,Object> insert(@Valid Work work,Product product,Process process,
+                                     Device device, BindingResult bindingResult){
         Map<String,Object> result = new HashMap<>();
         if(bindingResult.hasErrors()){
             return null;
         }
+        work.setProduct(product);
+        work.setProcess(process);
+        work.setDevice(device);
         boolean ret = workService.insertWork(work);
         if(ret){
             result.put("status",200);
@@ -164,11 +168,15 @@ public class WorkController {
 
     @RequestMapping("/update_all")
     @ResponseBody
-    public Map<String,Object> update_all(@RequestBody Work work ,BindingResult bindingResult){
+    public Map<String,Object> update_all(@Valid Work work ,Product product,Process process,
+                                         Device device,BindingResult bindingResult){
         Map<String,Object> result = new HashMap<>();
         if(bindingResult.hasErrors()){
             return null;
         }
+        work.setProduct(product);
+        work.setProcess(process);
+        work.setDevice(device);
         boolean ret = workService.updateWork(work);
         if(ret){
             result.put("status",200);

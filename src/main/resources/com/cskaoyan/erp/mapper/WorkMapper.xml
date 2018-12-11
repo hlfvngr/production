@@ -7,7 +7,7 @@
     <result column="process_number" jdbcType="VARCHAR" property="processNumber" />
     <result column="rating" jdbcType="INTEGER" property="rating" />
 
-    <association  property="workProduct" javaType="com.cskaoyan.erp.bean.Product">
+    <association  property="product" javaType="com.cskaoyan.erp.bean.Product">
       <id column="product_id" jdbcType="VARCHAR" property="productId" />
       <result column="product_name" jdbcType="VARCHAR" property="productName" />
       <result column="product_type" jdbcType="VARCHAR" property="productType" />
@@ -16,7 +16,7 @@
       <result column="status" jdbcType="INTEGER" property="status" />
     </association>
 
-    <association  property="workProcess" javaType="com.cskaoyan.erp.bean.Process">
+    <association  property="process" javaType="com.cskaoyan.erp.bean.Process">
       <id column="process_id" jdbcType="VARCHAR" property="processId" />
       <result column="sequence" jdbcType="INTEGER" property="sequence" />
       <result column="quota" jdbcType="INTEGER" property="quota" />
@@ -25,7 +25,7 @@
                    <!--select="com.cskaoyan.erp.mapper.TechnologyPlanMapper.searchByPlanId"/>-->
     </association>
 
-    <association  property="workDevice" javaType="com.cskaoyan.erp.bean.Device">
+    <association  property="device" javaType="com.cskaoyan.erp.bean.Device">
       <id column="device_id" jdbcType="VARCHAR" property="deviceId" />
       <result column="device_name" jdbcType="VARCHAR" property="deviceName" />
       <result column="device_status_id" jdbcType="VARCHAR" property="deviceStatusId" />
@@ -95,14 +95,14 @@
       <if test="processNumber != null and processNumber != ''">
         process_number = #{processNumber,jdbcType=VARCHAR},
       </if>
-      <if test="workProduct != null">
-        product_id = #{workProduct.productId,jdbcType=VARCHAR},
+      <if test="product.productId != null">
+        product_id = #{product.productId,jdbcType=VARCHAR},
       </if>
-      <if test="workProcess != null">
-        process_id = #{workProcess.processId,jdbcType=VARCHAR},
+      <if test="process.processId != null">
+        process_id = #{process.processId,jdbcType=VARCHAR},
       </if>
-      <if test="workDevice != null">
-        device_id = #{workDevice.deviceId,jdbcType=VARCHAR},
+      <if test="device.deviceId != null">
+        device_id = #{device.deviceId,jdbcType=VARCHAR},
       </if>
       <if test="rating != null and rating != ''">
         rating = #{rating,jdbcType=INTEGER},
@@ -117,14 +117,14 @@
         <if test="workId != null and workId != ''">
              and work_id = #{workId}
         </if>
-       <if test="workProduct != null">
-            and product_id = #{workProduct.productId}
+       <if test="product != null">
+            and product_id = #{product.productId}
        </if>
-       <if test="workProcess != null">
-           and process_id = #{workProcess.processId}
+       <if test="process != null">
+           and process_id = #{process.processId}
        </if>
-       <if test="workDevice != null">
-           and device_id = #{workDevice.deviceId}
+       <if test="device != null">
+           and device_id = #{device.deviceId}
        </if>
      </where>
   </select>
@@ -146,14 +146,14 @@
         <if test="workId != null and workId != ''">
           and w.work_id = #{workId}
         </if>
-        <if test="workProduct != null">
-          and pd.product_name = "%"#{workProduct.productName}"%"
+        <if test="product != null">
+          and pd.product_name = "%"#{product.productName}"%"
         </if>
-        <if test="workProcess != null">
-          and p.process_id = #{workProcess.processId}
+        <if test="process != null">
+          and p.process_id = #{process.processId}
         </if>
-        <if test="workDevice != null">
-          and d.device_name = "%"#{workDevice.deviceName}"%"
+        <if test="device != null">
+          and d.device_name = "%"#{device.deviceName}"%"
         </if>
       </where>
       limit #{limit} offset #{offset};
@@ -162,8 +162,8 @@
   <insert id="insert">
         insert into work
         (work_id, process_number,product_id,process_id,device_id, rating)
-        values (#{workId}, #{processNumber},#{workProduct.productId},
-         #{workProcess.processId},#{workDevice.deviceId}, #{rating})
+        values (#{workId}, #{processNumber},#{product.productId},
+         #{process.processId},#{device.deviceId}, #{rating})
   </insert>
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap">
