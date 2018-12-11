@@ -124,7 +124,7 @@ public class DepartmentController {
 		Department department = new Department();
 		List<Department> departments = departmentService.findAllDepartment(department, pageModel);
 		result.put("rows",departments);
-		result.put("total",departments.size());
+		result.put("total",pageModel.getRecordCount());
 		return result;
 	}
 
@@ -147,7 +147,7 @@ public class DepartmentController {
 		department.setDepartmentId(searchValue);
 		List<Department> departments = departmentService.findAllDepartment(department, pageModel);
 		result.put("rows",departments);
-		result.put("total",departments.size());
+		result.put("total",pageModel.getRecordCount());
 		return result;
 	}
 
@@ -161,7 +161,7 @@ public class DepartmentController {
 		department.setDepartmentName(searchValue);
 		List<Department> departments = departmentService.findAllDepartment(department, pageModel);
 		result.put("rows",departments);
-		result.put("total",departments.size());
+		result.put("total",pageModel.getRecordCount());
 		return result;
 	}
 

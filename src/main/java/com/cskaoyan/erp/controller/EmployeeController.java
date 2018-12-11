@@ -39,11 +39,12 @@ public class EmployeeController {
 
 	@RequestMapping("/insert")
 	@ResponseBody
-	public Map<String,Object> insert(@Valid Employee employee, MultipartFile multipartFile, BindingResult bindingResult){
+	public Map<String,Object> insert(@Valid Employee employee,Department department, MultipartFile multipartFile, BindingResult bindingResult){
 		Map<String,Object> result = new HashMap<String, Object>();
 		if(bindingResult.hasErrors()){
 			return null;
 		}
+		employee.setDepartment(department);
 		//multipartFile
 		boolean b = employeeService.insertEmployee(employee);
 		if(b){
@@ -93,11 +94,12 @@ public class EmployeeController {
 
 	@RequestMapping(value="/update_all")
 	@ResponseBody
-	public Map<String,Object> update_all( @Valid Employee employee,MultipartFile multipartFile,BindingResult bindingResult){
+	public Map<String,Object> update_all( @Valid Employee employee,Department department,MultipartFile multipartFile,BindingResult bindingResult){
 		Map<String,Object> result = new HashMap<String, Object>();
 		if(bindingResult.hasErrors()){
 			return null;
 		}
+		employee.setDepartment(department);
 		//multipartFile
 		boolean b = employeeService.updateEmployee(employee);
 		if(b){
@@ -125,7 +127,7 @@ public class EmployeeController {
 		Employee employee = new Employee();
 		List<Employee> employees = employeeService.findAllEmployee(employee, pageModel);
 		result.put("rows",employees);
-		result.put("total",employees.size());
+		result.put("total",pageModel.getRecordCount());
 		return result;
 	}
 
@@ -146,7 +148,7 @@ public class EmployeeController {
 		employee.setEmpId(searchValue);
 		List<Employee> employees = employeeService.findAllEmployee(employee, pageModel);
 		result.put("rows",employees);
-		result.put("total",employees.size());
+		result.put("total",pageModel.getRecordCount());
 		return result;
 	}
 
@@ -159,7 +161,7 @@ public class EmployeeController {
 		employee.setEmpName(searchValue);
 		List<Employee> employees = employeeService.findAllEmployee(employee, pageModel);
 		result.put("rows",employees);
-		result.put("total",employees.size());
+		result.put("total",pageModel.getRecordCount());
 		return result;
 	}
 

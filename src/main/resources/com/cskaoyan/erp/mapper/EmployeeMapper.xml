@@ -112,7 +112,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cskaoyan.erp.bean.Employee">
+  <update id="updateByPrimaryKey" parameterType="com.cskaoyan.erp.bean.Employee">
     update employee
     <set>
       <if test="empName != null">
@@ -148,8 +148,8 @@
       <if test="educationForm != null">
         education_form = #{educationForm,jdbcType=VARCHAR},
       </if>
-      <if test="departmentId != null">
-        department_id = #{departmentId,jdbcType=VARCHAR},
+      <if test="department != null">
+        department_id = #{department.departmentId,jdbcType=VARCHAR},
       </if>
     </set>
     where emp_id = #{empId,jdbcType=VARCHAR}
