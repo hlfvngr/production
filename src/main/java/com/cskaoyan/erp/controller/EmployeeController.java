@@ -12,7 +12,6 @@ import com.cskaoyan.erp.bean.Employee;
 import com.cskaoyan.erp.service.EmployeeService;
 import com.cskaoyan.erp.service.DepartmentService;
 import com.cskaoyan.erp.utils.PageModel;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -29,7 +28,6 @@ public class EmployeeController {
 
 	@RequestMapping("/add_judge")
 	@ResponseBody
-	@RequiresPermissions("employee:add")
 	public void add_judge(){}
 
 	@RequestMapping("/add")
@@ -65,7 +63,6 @@ public class EmployeeController {
 	//修改雇员
 	@RequestMapping("/edit_judge")
 	@ResponseBody
-	@RequiresPermissions("employee:edit")
 	public void edit_judge(){}
 
 	@RequestMapping("/edit")
@@ -192,7 +189,6 @@ public class EmployeeController {
 	//删除员工
 	@RequestMapping("/delete_judge")
 	@ResponseBody
-	@RequiresPermissions("employee:delete")
 	public void delete_judge(){}
 
 	@RequestMapping("/delete_batch")
