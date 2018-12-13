@@ -6,6 +6,9 @@ import com.cskaoyan.erp.bean.Technology;
 import com.cskaoyan.erp.service.ManufactureService;
 import com.cskaoyan.erp.service.OrderService;
 import com.cskaoyan.erp.utils.PageModel;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -102,7 +105,15 @@ public class ManufactureController {
     //增加生产计划
     @RequestMapping("/add_judge")
     @ResponseBody
-    public void add_judge(){}
+    public Map<String,Object> add_judge(){
+        Map<String,Object> map = new HashMap<>();
+        Subject subject = SecurityUtils.getSubject();
+        boolean b = subject.isPermitted("manufacture:add");
+        if(!b){
+            map.put("msg","禁止访问!");
+        }
+        return map;
+    }
 
     @RequestMapping("/add")
     public String add(){
@@ -136,7 +147,15 @@ public class ManufactureController {
     //修改生产计划
     @RequestMapping("/edit_judge")
     @ResponseBody
-    public void edit_judge(){}
+    public Map<String,Object> edit_judge(){
+        Map<String,Object> map = new HashMap<>();
+        Subject subject = SecurityUtils.getSubject();
+        boolean b = subject.isPermitted("manufacture:edit");
+        if(!b){
+            map.put("msg","禁止访问!");
+        }
+        return map;
+    }
 
     @RequestMapping("/edit")
     public String edit(){
@@ -170,7 +189,15 @@ public class ManufactureController {
     //删除生产计划
     @RequestMapping("/delete_judge")
     @ResponseBody
-    public void delete_judge(){}
+    public Map<String,Object> delete_judge(){
+        Map<String,Object> map = new HashMap<>();
+        Subject subject = SecurityUtils.getSubject();
+        boolean b = subject.isPermitted("manufacture:delete");
+        if(!b){
+            map.put("msg","禁止访问!");
+        }
+        return map;
+    }
 
     @RequestMapping("/delete_batch")
     @ResponseBody

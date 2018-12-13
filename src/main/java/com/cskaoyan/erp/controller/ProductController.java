@@ -3,6 +3,9 @@ package com.cskaoyan.erp.controller;
 import com.cskaoyan.erp.bean.Product;
 import com.cskaoyan.erp.service.ProductService;
 import com.cskaoyan.erp.utils.PageModel;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -24,7 +27,15 @@ public class ProductController {
     //增加商品
     @RequestMapping("/add_judge")
     @ResponseBody
-    public void add_judge(){}
+    public Map<String,Object> add_judge(){
+        Map<String,Object> map = new HashMap<>();
+        Subject subject = SecurityUtils.getSubject();
+        boolean b = subject.isPermitted("product:add");
+        if(!b){
+            map.put("msg","禁止访问!");
+        }
+        return map;
+    }
 
     @RequestMapping("/add")
     public String add(){
@@ -55,7 +66,15 @@ public class ProductController {
     //修改商品
     @RequestMapping("/edit_judge")
     @ResponseBody
-    public void edit_judge(){}
+    public Map<String,Object> edit_judge(){
+        Map<String,Object> map = new HashMap<>();
+        Subject subject = SecurityUtils.getSubject();
+        boolean b = subject.isPermitted("product:edit");
+        if(!b){
+            map.put("msg","禁止访问!");
+        }
+        return map;
+    }
 
     @RequestMapping("/edit")
     public String edit(){
@@ -174,7 +193,15 @@ public class ProductController {
     //删除商品
     @RequestMapping("/delete_judge")
     @ResponseBody
-    public void delete_judge(){}
+    public Map<String,Object> delete_judge(){
+        Map<String,Object> map = new HashMap<>();
+        Subject subject = SecurityUtils.getSubject();
+        boolean b = subject.isPermitted("product:delete");
+        if(!b){
+            map.put("msg","禁止访问!");
+        }
+        return map;
+    }
 
 
     @RequestMapping("/delete_batch")

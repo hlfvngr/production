@@ -12,6 +12,8 @@ import com.cskaoyan.erp.bean.Employee;
 import com.cskaoyan.erp.service.EmployeeService;
 import com.cskaoyan.erp.service.DepartmentService;
 import com.cskaoyan.erp.utils.PageModel;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -24,11 +26,20 @@ public class EmployeeController {
 
 	@Autowired
 	private EmployeeService employeeService;
+
 	private DepartmentService departmentService;
 
 	@RequestMapping("/add_judge")
 	@ResponseBody
-	public void add_judge(){}
+	public Map<String, Object> add_judge(){
+		Map<String,Object> map = new HashMap<>();
+		Subject subject = SecurityUtils.getSubject();
+		boolean b = subject.isPermitted("employee:add");
+		if(!b){
+			map.put("msg","禁止访问!");
+		}
+		return map;
+	}
 
 	@RequestMapping("/add")
 	public String add() {
@@ -63,7 +74,15 @@ public class EmployeeController {
 	//修改雇员
 	@RequestMapping("/edit_judge")
 	@ResponseBody
-	public void edit_judge(){}
+	public Map<String,Object> edit_judge(){
+		Map<String,Object> map = new HashMap<>();
+		Subject subject = SecurityUtils.getSubject();
+		boolean b = subject.isPermitted("employee:edit");
+		if(!b){
+			map.put("msg","禁止访问!");
+		}
+		return map;
+	}
 
 	@RequestMapping("/edit")
 	public String edit() {
@@ -189,7 +208,15 @@ public class EmployeeController {
 	//删除员工
 	@RequestMapping("/delete_judge")
 	@ResponseBody
-	public void delete_judge(){}
+	public Map<String,Object> delete_judge(){
+		Map<String,Object> map = new HashMap<>();
+		Subject subject = SecurityUtils.getSubject();
+		boolean b = subject.isPermitted("employee:delete");
+		if(!b){
+			map.put("msg","禁止访问!");
+		}
+		return map;
+	}
 
 	@RequestMapping("/delete_batch")
 	@ResponseBody

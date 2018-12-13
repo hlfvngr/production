@@ -1,6 +1,6 @@
 package com.cskaoyan.erp.bean;
 
-public class Admin {
+public class User {
     private String id;
 
     private String username;
@@ -8,6 +8,10 @@ public class Admin {
     private String password;
 
     private String locked;
+
+    private String roleId;
+
+    private String roleName;
 
     public String getId() {
         return id;
@@ -39,5 +43,21 @@ public class Admin {
 
     public void setLocked(String locked) {
         this.locked = locked == null ? null : locked.trim();
+    }
+
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 }

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- web.xml中shiro的filter对应的bean -->
+    <!-- Shiro 的Web过滤器 -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager" />
+        <!-- loginUrl认证提交地址，如果没有认证, 将会请求此地址进行认证，请求此地址将由 formAuthenticationFilter进行表单认证 -->
+        <property name="loginUrl" value="/" />
+        <!-- 认证成功统一跳转到first.action，建议不配置，shiro认证成功自动到上一个请求路径 -->
+        <!-- <property name="successUrl" value="/first.action"/> -->
+        <!-- 通过unauthorizedUrl指定没有权限操作时跳转页面-->
+        <property name="unauthorizedUrl" value="/refuse.jsp" />
+
+        <!-- 过虑器链定义，从上向下顺序执行，一般将/**放在最下边 -->
+        <property name="filterChainDefinitions">
+            <value>
+                /css/** = anon
+                /image/** = anon
+                /js/** = anon
+                /ajaxLogin = anon
+                /logout = logout
+                /** = authc
+            </value>
+        </property>
+    </bean>
+
+   <!-- &lt;!&ndash;自定义filter认证过滤器&ndash;&gt;
+    <bean id="customFormAuthenticationFilter" class="com.cskaoyan.hrm.interceptor.CustomFormAuthenticationFilter">
+        <property name="usernameParam" value="username"/>
+        <property name="passwordParam" value="password"/>
+    </bean>-->
+
+    <!-- 缓存管理器开始 -->
+    <!--***-->
+    <bean id="ehCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager" >
+        <property name="cacheManagerConfigFile" value="classpath:shiro-ehcache.xml"/>
+    </bean>
+    <!--***-->
+
+    <!--会话管理器-->
+    <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <!--session的失效时长，单位毫秒，这里设置为3分钟(6秒测试)-->
+        <property name="globalSessionTimeout" value="180000"/>
+        <!--删除失效的session-->
+        <property name="deleteInvalidSessions" value="true"/>
+    </bean>
+
+    <!-- realm -->
+    <!--<bean id="customMd5Realm" class="com.cskaoyan.erp.Realm.UserMD5Realm">
+        &lt;!&ndash; 将凭证匹配器设置到realm中，realm按照凭证匹配器的要求进行散列 &ndash;&gt;
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+    </bean>-->
+    <!-- 凭证匹配器 -->
+    <bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+        <property name="hashAlgorithmName" value="md5"></property>
+        <property name="hashIterations" value="1"></property>
+    </bean>
+
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="userRealm"/>
+        <!--注入缓存器-->
+        <property name="cacheManager" ref="ehCacheManager"/>
+        <!--会话管理器-->
+        <property name="sessionManager" ref="sessionManager"/>
+    </bean>
+
+    <bean id="userRealm" class="com.cskaoyan.erp.Realm.UserRealm"/>
+
+
+    <!-- @RequiresPermissions(value={"xxx:xxx","xxx:xxx"},logical=Logical.OR)
+     注解要生效需要在springmvc的配置文件里增加如下代码-->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"></bean>
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+          depends-on="lifecycleBeanPostProcessor" />
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+
+    <!-- 配置异常跳转页面，此处异常页面是使用shiro注解时没有权限访问的跳转页面，不配置则会报500错误 -->
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="org.apache.shiro.authz.UnauthorizedException">
+                    <!-- 没有权限时跳转的页面 -->
+                    /refuse
+                </prop>
+            </props>
+        </property>
+    </bean>
+
+
+
+</beans>

@@ -1,9 +1,8 @@
 package com.cskaoyan.erp.controller;
 
-import com.cskaoyan.erp.bean.Manufacture;
-import com.cskaoyan.erp.bean.Task;
-import com.cskaoyan.erp.bean.Work;
-import com.cskaoyan.erp.service.TaskService;
+import com.cskaoyan.erp.bean.Role;
+import com.cskaoyan.erp.bean.User;
+import com.cskaoyan.erp.service.UserService;
 import com.cskaoyan.erp.utils.PageModel;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -22,85 +21,79 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/task")
-public class TaskController {
+@RequestMapping("/user")
+public class UserController {
 
     @Autowired
-    TaskService taskService;
+    UserService userService;
 
-    //查找生产派工
+    @RequestMapping("/role")
+    public String role(){
+        return "user_role_edit";
+    }
+
+    //查找用户
     @RequestMapping("/find")
     public String find(){
-        return "task_list";
+        return "user_list";
     }
 
     @RequestMapping("/list")
     @ResponseBody
     public Map<String,Object> list(PageModel pageModel){
         Map<String,Object> result = new HashMap<>();
-        Task task = new Task();
-        List<Task> tasks = taskService.findAllTask(task, pageModel);
 
-        result.put("rows",tasks);
+        User user = new User();
+        List<User> users = userService.findUser(user,pageModel);
+
+        result.put("rows",users);
         result.put("total",pageModel.getRecordCount());
         return result;
     }
 
-    @RequestMapping("/search_task_by_taskId")
+    @RequestMapping("/search_user_by_userId")
     @ResponseBody
-    public Map<String,Object> search_task_by_taskId(String searchValue, PageModel pageModel){
+    public Map<String,Object> search_user_by_userId(User user ,String searchValue,PageModel pageModel){
         Map<String,Object> result = new HashMap<>();
+        user.setId(searchValue);
+        List<User> users = userService.findUser(user,pageModel);
 
-        Task task = new Task();
-        task.setTaskId(searchValue);
-        List<Task> tasks = taskService.findAllTask(task, pageModel);
-
-        result.put("rows",tasks);
+        result.put("rows",users);
         result.put("total",pageModel.getRecordCount());
         return result;
     }
 
-    @RequestMapping("/search_task_by_taskWorkId")
+    @RequestMapping("/search_user_by_userName")
     @ResponseBody
-    public Map<String,Object> search_task_by_taskWorkId(String searchValue, PageModel pageModel){
+    public Map<String,Object> search_user_by_userName(User user ,String searchValue,PageModel pageModel){
         Map<String,Object> result = new HashMap<>();
+        user.setUsername(searchValue);
+        List<User> users = userService.findUser(user,pageModel);
 
-        Work work = new Work();
-        work.setWorkId(searchValue);
-
-        Task task = new Task();
-        task.setWork(work);
-        List<Task> tasks = taskService.findAllTask(task, pageModel);
-
-        result.put("rows",tasks);
+        result.put("rows",users);
         result.put("total",pageModel.getRecordCount());
         return result;
     }
 
-    @RequestMapping("/search_task_by_taskManufactureSn")
+    @RequestMapping("/search_user_by_roleName")
     @ResponseBody
-    public Map<String,Object> search_task_by_taskManufactureSn(String searchValue, PageModel pageModel){
+    public Map<String,Object> search_user_by_roleName(User user ,String searchValue,PageModel pageModel){
         Map<String,Object> result = new HashMap<>();
+        user.setRoleName(searchValue);
+        List<User> users = userService.findUser(user,pageModel);
 
-        Manufacture manufacture = new Manufacture();
-        manufacture.setManufactureSn(searchValue);
-
-        Task task = new Task();
-        task.setManufacture(manufacture);
-        List<Task> tasks = taskService.findAllTask(task, pageModel);
-
-        result.put("rows",tasks);
+        result.put("rows",users);
         result.put("total",pageModel.getRecordCount());
         return result;
     }
 
-    //增加生产派工
+    //增加用户
     @RequestMapping("/add_judge")
     @ResponseBody
     public Map<String,Object> add_judge(){
         Map<String,Object> map = new HashMap<>();
         Subject subject = SecurityUtils.getSubject();
-        boolean b = subject.isPermitted("task:add");
+        boolean b = subject.isPermitted("user:add");
         if(!b){
             map.put("msg","禁止访问!");
         }
@@ -109,38 +102,44 @@ public class TaskController {
 
     @RequestMapping("/add")
     public String add(){
-        return "task_add";
+        return "user_add";
     }
 
     @RequestMapping("/insert")
     @ResponseBody
-    public Map<String,Object> insert( @Valid Task task,Manufacture manufacture,Work work, BindingResult bindingResult){
+    public Map<String,Object> insert(@Valid User user, BindingResult bindingResult){
         Map<String,Object> result = new HashMap<>();
         if(bindingResult.hasErrors()){
-            return null;
+           return null;
         }
-        task.setManufacture(manufacture);
-        task.setWork(work);
-        boolean b = taskService.insertTask(task);
-        if(b){
-            result.put("status",200);
-            result.put("msg","OK");
+        //需要判断数据库中是否存在相同id的用户
+        User userById = userService.findUserById(user.getId());
+        if(userById != null){
+            result.put("status",0);
+            result.put("msg","新增用户id已经存在");
             result.put("data",null);
         }else {
-            result.put("status",100);
-            result.put("msg","fail");
-            result.put("data",null);
+            boolean b = userService.insert(user);
+            if(b){
+                result.put("status",200);
+                result.put("msg","新增用户信息成功");
+                result.put("data",null);
+            }else {
+                result.put("status",100);
+                result.put("msg","新增用户信息失败");
+                result.put("data",null);
+            }
         }
         return result;
     }
 
-    //修改生产派工
+    //修改用户
     @RequestMapping("/edit_judge")
     @ResponseBody
     public Map<String,Object> edit_judge(){
         Map<String,Object> map = new HashMap<>();
         Subject subject = SecurityUtils.getSubject();
-        boolean b = subject.isPermitted("task:edit");
+        boolean b = subject.isPermitted("user:edit");
         if(!b){
             map.put("msg","禁止访问!");
         }
@@ -149,63 +148,60 @@ public class TaskController {
 
     @RequestMapping("/edit")
     public String edit(){
-        return "task_edit";
+        return "user_edit";
     }
 
     @RequestMapping("/update_all")
     @ResponseBody
-    public Map<String,Object> update_all( @Valid Task task,Manufacture manufacture,Work work, BindingResult bindingResult){
+    public Map<String,Object> update_all(@Valid User user, BindingResult bindingResult){
         Map<String,Object> result = new HashMap<>();
-
-        if(bindingResult.hasErrors()){
+        if(bindingResult.hasErrors()) {
             return null;
         }
-        task.setManufacture(manufacture);
-        task.setWork(work);
-        boolean b = taskService.updateTask(task);
+        //需要判断数据库中是否存在相同id的用户
+        boolean b = userService.update(user);
         if(b){
             result.put("status",200);
-            result.put("msg","OK");
+            result.put("msg","修改用户信息成功");
             result.put("data",null);
         }else {
             result.put("status",100);
-            result.put("msg","fail");
+            result.put("msg","修改用户信息失败");
             result.put("data",null);
         }
         return result;
-
     }
 
-    //删除生产派工
+    //删除用户
     @RequestMapping("/delete_judge")
     @ResponseBody
     public Map<String,Object> delete_judge(){
         Map<String,Object> map = new HashMap<>();
         Subject subject = SecurityUtils.getSubject();
-        boolean b = subject.isPermitted("task:delete");
+        boolean b = subject.isPermitted("user:delete");
         if(!b){
             map.put("msg","禁止访问!");
         }
         return map;
     }
 
-
     @RequestMapping("/delete_batch")
     @ResponseBody
-    public Map<String,Object> delete_batch(@RequestBody @RequestParam("ids") String ids_str){
+    public Map<String,Object> delete_batch(@RequestBody @RequestParam("ids") String ids_str) {
         Map<String,Object> result = new HashMap<>();
 
         String[] ids = ids_str.split(",");
-        boolean b = taskService.deleteTask(ids);
+        boolean b = userService.deleteUser(ids);
         if(b){
             result.put("status",200);
-            result.put("msg","OK");
+            result.put("msg","删除用户信息成功");
             result.put("data",null);
         }else {
             result.put("status",100);
-            result.put("msg","fail");
+            result.put("msg","删除用户信息失败");
             result.put("data",null);
         }
         return result;
     }
+
 }

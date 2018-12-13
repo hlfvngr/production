@@ -118,13 +118,13 @@
              and work_id = #{workId}
         </if>
        <if test="product != null">
-            and product_id = #{product.productId}
+         and pd.product_name like "%"#{product.productName}"%"
        </if>
        <if test="process != null">
            and process_id = #{process.processId}
        </if>
        <if test="device != null">
-           and device_id = #{device.deviceId}
+         and d.device_name like "%"#{device.deviceName}"%"
        </if>
      </where>
   </select>
@@ -147,13 +147,13 @@
           and w.work_id = #{workId}
         </if>
         <if test="product != null">
-          and pd.product_name = "%"#{product.productName}"%"
+          and pd.product_name like "%"#{product.productName}"%"
         </if>
         <if test="process != null">
           and p.process_id = #{process.processId}
         </if>
         <if test="device != null">
-          and d.device_name = "%"#{device.deviceName}"%"
+          and d.device_name like "%"#{device.deviceName}"%"
         </if>
       </where>
       limit #{limit} offset #{offset};

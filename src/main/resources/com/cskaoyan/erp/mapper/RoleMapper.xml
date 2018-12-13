@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.erp.mapper.RoleMapper">
+
+    <resultMap id="BaseResultMap" type="com.cskaoyan.erp.bean.Role">
+        <id column="role_id" jdbcType="VARCHAR" property="roleId" />
+        <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+        <result column="available" jdbcType="VARCHAR" property="available" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        role_id, role_name, available
+    </sql>
+
+    <select id="selectAllRole" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from sys_role;
+    </select>
+
+    <select id="count" resultType="_int">
+        select  count(*) from sys_role
+        <where>
+            <if test="roleId != null and roleId != ''">
+                and role_id like #{roleId}
+            </if>
+            <if test="roleName != null and roleName != ''">
+                and role_name like "%"#{roleName}"%"
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByPage" resultMap="BaseResultMap">
+        select  role_id, role_name, available from sys_role
+        <where>
+            <if test="roleId != null and roleId != ''">
+                and role_id like #{roleId}
+            </if>
+            <if test="roleName != null and roleName != ''">
+                and role_name like "%"#{roleName}"%"
+            </if>
+        </where>
+         limit #{limit} offset #{offset};
+    </select>
+
+    <select id="selectRoleById" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from sys_role where role_id = #{roleId};
+    </select>
+
+    <insert id="insert">
+        insert into sys_role
+        (role_id, role_name, available)
+        values(#{roleId},#{roleName},#{available});
+    </insert>
+
+    <update id="updateByPrimaryKey">
+        update sys_role set
+          role_name = #{roleName}, available = #{available}
+          where role_id = #{roleId};
+    </update>
+
+    <delete id="deleteByPrimaryKey" >
+        delete from sys_role where role_id = #{roleId};
+    </delete>
+</mapper>
