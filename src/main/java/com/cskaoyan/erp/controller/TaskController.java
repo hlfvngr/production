@@ -11,10 +11,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -44,6 +41,18 @@ public class TaskController {
         result.put("rows",tasks);
         result.put("total",pageModel.getRecordCount());
         return result;
+    }
+
+    @RequestMapping("/get/{taskId}")
+    @ResponseBody
+    public Task get(@PathVariable String taskId){
+        return taskService.findTaskById(taskId);
+    }
+
+    @RequestMapping("/get_data")
+    @ResponseBody
+    public List<Task> get_data(){
+        return taskService.findAllTask();
     }
 
     @RequestMapping("/search_task_by_taskId")
@@ -119,18 +128,26 @@ public class TaskController {
         if(bindingResult.hasErrors()){
             return null;
         }
-        task.setManufacture(manufacture);
-        task.setWork(work);
-        boolean b = taskService.insertTask(task);
-        if(b){
-            result.put("status",200);
-            result.put("msg","OK");
+        Task taskById = taskService.findTaskById(task.getTaskId());
+        if(taskById != null){
+            result.put("status",0);
+            result.put("msg","该生产计划id已经存在");
             result.put("data",null);
         }else {
-            result.put("status",100);
-            result.put("msg","fail");
-            result.put("data",null);
+            task.setManufacture(manufacture);
+            task.setWork(work);
+            boolean b = taskService.insertTask(task);
+            if(b){
+                result.put("status",200);
+                result.put("msg","OK");
+                result.put("data",null);
+            }else {
+                result.put("status",100);
+                result.put("msg","fail");
+                result.put("data",null);
+            }
         }
+
         return result;
     }
 

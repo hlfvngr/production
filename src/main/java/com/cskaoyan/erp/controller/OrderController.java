@@ -16,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -48,21 +49,30 @@ public class OrderController {
 
     @RequestMapping("/insert")
     @ResponseBody
-    public Map<String,Object> insert(@Valid Order order, Customer customer,Product product,
-                                     MultipartFile multipartFile, BindingResult bindingResult){
+    public Map<String,Object> insert(@Valid Order order, Customer customer, Product product,
+                                     HttpSession session, BindingResult bindingResult){
         Map<String,Object> result = new HashMap<String, Object>();
         if(bindingResult.hasErrors()){
             return null;
         }
-            //图片的处理
-        order.setCustom(customer);
-        order.setProduct(product);
+
         Order orderById = orderService.findOrderById(order.getOrderId());
         if(orderById != null){
             result.put("status",0);
             result.put("msg","该订单号已经存在!,请重新插入");
             result.put("data",null);
         }else {
+            order.setCustom(customer);
+            order.setProduct(product);
+            String imgs = (String) session.getAttribute("imgs");
+            String files = (String) session.getAttribute("files");
+            //赋值完成后将imgs和filePath清空
+            session.setAttribute("imgs","");
+            session.setAttribute("files","");
+
+            order.setImage(imgs);
+            order.setFile(files);
+
             boolean ret = orderService.insertOrder(order);
             if(ret){
                 result.put("status",200);
@@ -80,7 +90,7 @@ public class OrderController {
 
 
     //查找订单
-    @RequestMapping("/get/${orderId}")
+    @RequestMapping("/get/{orderId}")
     @ResponseBody
     public Order get(@PathVariable String orderId){
         return orderService.findOrderById(orderId);
@@ -110,9 +120,9 @@ public class OrderController {
         return result;
     }
 
-    @RequestMapping("/search_product_by_orderId")
+    @RequestMapping("/search_order_by_orderId")
     @ResponseBody
-    public  Map<String,Object>  search_product_by_orderId(String searchValue, PageModel pageModel){
+    public  Map<String,Object>  search_order_by_orderId(String searchValue, PageModel pageModel){
         Map<String,Object> result = new HashMap<String, Object>();
 
         Order order = new Order();
@@ -124,9 +134,9 @@ public class OrderController {
         return result;
     }
 
-    @RequestMapping("/search_product_by_orderCustom")
+    @RequestMapping("/search_order_by_orderCustom")
     @ResponseBody
-    public   Map<String,Object> search_product_by_orderCustom(String searchValue, PageModel pageModel) {
+    public   Map<String,Object> search_order_by_orderCustom(String searchValue, PageModel pageModel) {
         Map<String, Object> result = new HashMap<String, Object>();
 
         Customer customer = new Customer();
@@ -141,9 +151,9 @@ public class OrderController {
         return result;
     }
 
-    @RequestMapping("/search_product_by_orderProduct")
+    @RequestMapping("/search_order_by_orderProduct")
     @ResponseBody//联合查询更好
-    public  Map<String,Object> search_product_by_orderProduct(String searchValue, PageModel pageModel){
+    public  Map<String,Object> search_order_by_orderProduct(String searchValue, PageModel pageModel){
         Map<String,Object> result = new HashMap<String, Object>();
 
         Product product =new Product();
@@ -202,15 +212,55 @@ public class OrderController {
 
     @RequestMapping("/update_all")
     @ResponseBody
-    public Map<String,Object>  update_all( @Valid Order order,  Customer customer,Product product,
-                                          MultipartFile multipartFile, BindingResult bindingResult){
+    public Map<String,Object>  update_all( @Valid Order order, Customer customer,Product product,
+                                          HttpSession session, BindingResult bindingResult){
         Map<String,Object> result = new HashMap<String, Object>();
 
         if(bindingResult.hasErrors()){
             return null;
         }
+
         order.setCustom(customer);
         order.setProduct(product);
+        String imgs = (String) session.getAttribute("imgs");
+        String files = (String) session.getAttribute("files");
+        String deleteImg = (String) session.getAttribute("deleteImg");
+        String deleteFile = (String) session.getAttribute("deleteFile");
+        String image = "";
+        String file = "";
+        if(deleteImg != null && !deleteImg.isEmpty()){
+            String[] i = deleteImg.split(",");
+            image = order.getImage();
+            for (String str : i) {
+                if(image.startsWith(str)){
+                    image.replace(str,"");
+                }else {
+                    image.replace("," + str,"");
+                }
+            }
+        }
+
+        if(deleteFile != null && !deleteFile.isEmpty()){
+            String[] f = deleteImg.split(",");
+            file = order.getFile();
+            for (String str : f) {
+                if(file.startsWith(str)){
+                    file.replace(str,"");
+                }else {
+                    file.replace("," + str,"");
+                }
+            }
+        }
+
+        //赋值完成后将imgs和filePath清空
+        session.setAttribute("imgs","");
+        session.setAttribute("files","");
+        session.setAttribute("deleteImg","");
+        session.setAttribute("deleteFile","");
+
+        order.setImage(imgs + "," + image);
+        order.setFile(files + "," + file);
+
         boolean ret = orderService.updateOrder(order);
         if(ret){
             result.put("status",200);

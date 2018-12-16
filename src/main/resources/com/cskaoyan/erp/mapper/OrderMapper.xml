@@ -175,16 +175,17 @@
   </update>
 
   <select id="count" resultType="_int">
-      select count(*) from c_order
+      select count(*) from c_order o left join custom cus on o.custom_id = cus.custom_id
+    left join product p on o.product_id = p.product_id
     <where>
           <if test="orderId != null">
-            and order_id like #{orderId,jdbcType=VARCHAR}
+            and o.order_id like #{orderId,jdbcType=VARCHAR}
           </if>
-          <if test="orderCustom != null">
-            and custom_id like "%"#{custom.customId,jdbcType=VARCHAR}"%"
+          <if test="custom != null">
+            and cus.custom_name like "%"#{custom.customName,jdbcType=VARCHAR}"%"
           </if>
-          <if test="orderProduct != null">
-            and product_id like "%"#{product.productId,jdbcType=VARCHAR}"%"
+          <if test="product != null">
+            and p.product_name like "%"#{product.productName,jdbcType=VARCHAR}"%"
           </if>
     </where>
   </select>
@@ -206,11 +207,11 @@
       <if test="orderId != null and orderId!=''">
         and o.order_id like #{orderId,jdbcType=VARCHAR}
       </if>
-      <if test="orderCustom != null">
-        and o.custom_id like "%"#{custom.customId,jdbcType=VARCHAR}"%"
+      <if test="custom != null">
+        and cus.custom_name like "%"#{custom.customName,jdbcType=VARCHAR}"%"
       </if>
-      <if test="orderProduct != null">
-        and o.product_id like "%"#{product.productId,jdbcType=VARCHAR}"%"
+      <if test="product != null">
+        and p.product_name like "%"#{product.productName,jdbcType=VARCHAR}"%"
       </if>
     </where>
       limit #{limit} offset #{offset};

@@ -47,10 +47,10 @@ public class WorkController {
         return result;
     }
 
-    @RequestMapping("/get/${workId}")
+    @RequestMapping("/get/{workId}")
     @ResponseBody
-    public Work get(@PathVariable String wordId){
-        return workService.findWorkById(wordId);
+    public Work get(@PathVariable String workId){
+        return workService.findWorkById(workId);
     }
 
     @RequestMapping("/get_data")
@@ -150,19 +150,27 @@ public class WorkController {
         if(bindingResult.hasErrors()){
             return null;
         }
-        work.setProduct(product);
-        work.setProcess(process);
-        work.setDevice(device);
-        boolean ret = workService.insertWork(work);
-        if(ret){
-            result.put("status",200);
-            result.put("msg","OK");
+        Work workById = workService.findWorkById(work.getWorkId());
+        if(workById != null){
+            result.put("status",0);
+            result.put("msg","该作业id已经存在");
             result.put("data",null);
         }else {
-            result.put("status",100);
-            result.put("msg","fail");
-            result.put("data",null);
+            work.setProduct(product);
+            work.setProcess(process);
+            work.setDevice(device);
+            boolean ret = workService.insertWork(work);
+            if(ret){
+                result.put("status",200);
+                result.put("msg","OK");
+                result.put("data",null);
+            }else {
+                result.put("status",100);
+                result.put("msg","fail");
+                result.put("data",null);
+            }
         }
+
         return result;
 
     }

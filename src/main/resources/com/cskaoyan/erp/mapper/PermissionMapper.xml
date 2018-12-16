@@ -16,4 +16,9 @@
        select <include refid="Base_Column_List"/> from sys_role_permission where sys_role_id = #{roleId};
     </select>
 
+    <update id="updateByRoleId">
+        update sys_role_permission set
+        sys_permission_id = #{sysPermissionId}
+        where sys_role_id = #{sysRoleId};
+    </update>
 </mapper>

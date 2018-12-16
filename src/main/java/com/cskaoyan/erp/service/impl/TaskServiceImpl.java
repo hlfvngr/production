@@ -17,6 +17,10 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     TaskMapper taskMapper;
 
+    public List<Task> findAllTask(){
+        return taskMapper.selectAllTask();
+    }
+
     public List<Task> findAllTask(Task task, PageModel pageModel) {
         Map<String,Object> map = new HashMap<String, Object>();
         map.put("taskId",task.getTaskId());
@@ -50,5 +54,10 @@ public class TaskServiceImpl implements TaskService {
             }
         }
         return true;
+    }
+
+    @Override
+    public Task findTaskById(String taskId) {
+        return taskMapper.selectByPrimaryKey(taskId);
     }
 }

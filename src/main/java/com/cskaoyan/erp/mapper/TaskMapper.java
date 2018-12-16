@@ -23,4 +23,7 @@ public interface TaskMapper {
     int count(Map<String, Object> map);
 
     List<Task> selectByPage(Map<String, Object> map);
+
+    List<Task> selectAllTask();
+
 }

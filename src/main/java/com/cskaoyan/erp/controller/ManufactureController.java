@@ -12,10 +12,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -52,6 +49,12 @@ public class ManufactureController {
     @ResponseBody
     public List<Manufacture> get_data(){
         return manufactureService.findAllManufacture();
+    }
+
+    @RequestMapping("/get/{manufactureSn}")
+    @ResponseBody
+    public Manufacture get(@PathVariable String manufactureSn){
+        return manufactureService.findManufactureById(manufactureSn);
     }
 
     @RequestMapping("/search_manufacture_by_manufactureSn")
@@ -128,18 +131,26 @@ public class ManufactureController {
             return null;
         }
 
-        manufacture.setcOrder(cOder);
-        manufacture.setTechnology(technology);
-        boolean b = manufactureService.insertManufacture(manufacture);
-        if(b){
-            result.put("status",200);
-            result.put("msg","OK");
+        Manufacture manufactureById = manufactureService.findManufactureById(manufacture.getManufactureSn());
+        if(manufactureById != null){
+            result.put("status",0);
+            result.put("msg","该生产派工id已经存在");
             result.put("data",null);
         }else {
-            result.put("status",100);
-            result.put("msg","fail");
-            result.put("data",null);
+            manufacture.setcOrder(cOder);
+            manufacture.setTechnology(technology);
+            boolean b = manufactureService.insertManufacture(manufacture);
+            if(b){
+                result.put("status",200);
+                result.put("msg","OK");
+                result.put("data",null);
+            }else {
+                result.put("status",100);
+                result.put("msg","fail");
+                result.put("data",null);
+            }
         }
+
         return result;
 
     }

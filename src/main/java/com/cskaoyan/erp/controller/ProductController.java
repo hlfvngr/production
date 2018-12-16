@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -44,21 +45,34 @@ public class ProductController {
 
     @RequestMapping("/insert")//图片还没有处理
     @ResponseBody
-    public Map<String,Object> insert(@Valid Product product, MultipartFile multipartFile, BindingResult bindingResult){
+    public Map<String,Object> insert(@Valid Product product, HttpSession session, BindingResult bindingResult){
         Map<String,Object> result = new HashMap<String, Object>();
         if(bindingResult.hasErrors()){
             return null;
         }
         //multipartFile
-        boolean b = productService.insertProduct(product);
-        if(b){
-            result.put("status",200);
-            result.put("msg","OK");
+        Product productById = productService.findProductById(product.getProductId());
+        if(productById != null){
+            result.put("status",0);
+            result.put("msg","该商品id已经存在");
             result.put("data",null);
         }else {
-            result.put("status",100);
-            result.put("msg","fail");
-            result.put("data",null);
+            String imgs = (String) session.getAttribute("imgs");
+            //赋值完成后将imgs清空
+            session.setAttribute("imgs","");
+
+            product.setImage(imgs);
+
+            boolean b = productService.insertProduct(product);
+            if(b){
+                result.put("status",200);
+                result.put("msg","OK");
+                result.put("data",null);
+            }else {
+                result.put("status",100);
+                result.put("msg","fail");
+                result.put("data",null);
+            }
         }
 
         return result;
@@ -104,12 +118,31 @@ public class ProductController {
 
     @RequestMapping("/update_all")
     @ResponseBody
-    public Map<String,Object> update_all( @Valid Product product,MultipartFile multipartFile,BindingResult bindingResult){
+    public Map<String,Object> update_all( @Valid Product product,HttpSession session,BindingResult bindingResult){
         Map<String,Object> result = new HashMap<String, Object>();
         if(bindingResult.hasErrors()){
             return null;
         }
-        //multipartFile
+
+        String imgs = (String) session.getAttribute("imgs");
+        String deleteImg = (String) session.getAttribute("deleteImg");
+
+        String[] split = deleteImg.split(",");
+        String image = product.getImage();
+        for (String str : split) {
+            if(image.startsWith(str)){
+                image.replace(str,"");
+            }else {
+                image.replace("," + str,"");
+            }
+        }
+
+        //赋值完成后将imgs清空
+        session.setAttribute("imgs","");
+        session.setAttribute("deleteImg","");
+
+        product.setImage(imgs + "" + image);
+
         boolean b = productService.updateProduct(product);
         if(b){
             result.put("status",200);

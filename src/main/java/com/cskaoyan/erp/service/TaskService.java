@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface TaskService {
 
+    List<Task> findAllTask();
+
     List<Task> findAllTask(Task task, PageModel pageModel);
 
     boolean insertTask(Task task);
@@ -15,4 +17,5 @@ public interface TaskService {
 
     boolean deleteTask(String[] ids);
 
+    Task findTaskById(String taskId);
 }

@@ -152,22 +152,14 @@ public class RoleController {
     }
 
     @RequestMapping("/update_all")
-    @ResponseBody
-    public Map<String,Object> update_all(@Valid Role role,BindingResult bindingResult){
+    @ResponseBody//在查看用户时，不允许对某个角色的权限进行修改
+    public Map<String,Object> update_all(){
         Map<String,Object> result = new HashMap<>();
-        if(bindingResult.hasErrors()){
-            return null;
-        }
-        boolean b = roleService.updateRole(role);
-        if(b){
-            result.put("status",200);
-            result.put("msg","修改权限信息成功");
+
+            result.put("status",0);
+            result.put("msg","此处页面不支持修改！");
             result.put("data",null);
-        }else {
-            result.put("status",100);
-            result.put("msg","修改权限信息失败");
-            result.put("data",null);
-        }
+
         return result;
     }
 

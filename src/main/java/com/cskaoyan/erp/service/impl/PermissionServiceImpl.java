@@ -16,5 +16,10 @@ public class PermissionServiceImpl  implements PermissionService {
     public Permission findPermissionByRoleId(String roleId) {
         return permissionMapper.selectPermissionByRoleId(roleId);
     }
+
+    @Override
+    public boolean updateByRoleId(Permission perm) {
+        return permissionMapper.updateByRoleId(perm) != 0;
+    }
 }
 

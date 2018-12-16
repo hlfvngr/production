@@ -124,6 +124,10 @@
       left join `work` w on t.work_id = w.work_id
   </sql>
 
+  <select id="selectAllTask" resultMap="BaseResultMap">
+    select  <include refid="join"/> ;
+  </select>
+
   <select id="selectByPage" resultMap="BaseResultMap">
     select <include refid="join"/>
     <where>
